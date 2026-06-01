@@ -869,21 +869,16 @@ function drawImageCropped(ctx, dataUrl, destX, destY, destWidth, destHeight) {
 
 // Draw Frame Footer Text in clean modern sans-serif/monospace font
 function drawFrameOverlays(ctx, width, height) {
-  const logoText = "✦ 4TH ANNIV. BESTIES ✦";
   const dateStr = currentDateStr.textContent;
-  const footerY = height - (height * 0.05);
+  const footerY = height - (height * 0.04);
 
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
-  // Use clean Alagard/monospace for Y2K/NewJeans aesthetic logo print
-  ctx.font = `bold ${width * 0.038}px 'Alagard', 'Share Tech Mono', sans-serif`;
-  ctx.fillStyle = '#111111';
-  ctx.fillText(logoText, width / 2, footerY);
-
-  ctx.font = `bold ${width * 0.028}px 'Alagard', 'Share Tech Mono', sans-serif`;
+  // Use clean Share Tech Mono for the date
+  ctx.font = `bold ${width * 0.032}px 'Share Tech Mono', monospace`;
   ctx.fillStyle = '#4b5563';
-  ctx.fillText(dateStr, width / 2, footerY + (height * 0.024));
+  ctx.fillText(dateStr, width / 2, footerY);
 }
 
 // Draw Stickers onto composite high-res Canvas

@@ -595,16 +595,11 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-family: 'Alagard', 'Share Tech Mono', monospace;
+  font-family: 'Share Tech Mono', monospace;
   gap: 2px;
 }
-.footer-title {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #111111;
-}
 .footer-date {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: #4b5563;
   font-weight: bold;
 }
