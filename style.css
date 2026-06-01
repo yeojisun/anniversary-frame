@@ -38,6 +38,14 @@
   padding: 0;
 }
 
+.hidden {
+  display: none !important;
+}
+
+.slots-grid {
+  min-height: 0;
+}
+
 body {
   /* Helvetica font specified from Notion page */
   font-family: 'Helvetica', 'Inter', 'Noto Sans KR', sans-serif;
@@ -975,4 +983,30 @@ body {
 .download-trigger-btn:active {
   transform: translate(1px, 1px);
   box-shadow: 1px 1px 0px #111111;
+}
+
+@media (max-width: 480px) {
+  .cute-title {
+    font-size: 2.1rem;
+    letter-spacing: 1px;
+    text-shadow: 1.5px 1.5px 0px #111111;
+  }
+  .cute-title .space {
+    width: 6px;
+  }
+  .subtitle {
+    font-size: 0.9rem;
+  }
+  .frame-container {
+    padding: 10px;
+    box-shadow: 4px 4px 0px #111111;
+  }
+  .format-four-cut {
+    height: 65vh;
+    max-height: 520px;
+  }
+  .format-single-cut {
+    height: 48vh;
+    max-height: 380px;
+  }
 }
