@@ -1,0 +1,978 @@
+/* Y2K Minimalist & NewJeans Theme CSS Styling */
+
+/* Local font-face link for the cute Genty font as requested from Notion */
+@font-face {
+  font-family: 'Genty';
+  src: url('fonts/GentyDemo-Regular.ttf') format('truetype'),
+       url('fonts/GentyDemo-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Alagard';
+  src: url('fonts/alagard.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Local font fallbacks for Helvetica */
+:root {
+  --y2k-cyber-violet: #818cf8;
+  --y2k-neon-pink: #ec4899;
+  --y2k-cyber-blue: #06b6d4;
+  --y2k-dark-silver: #475569;
+  --y2k-light-silver: #e2e8f0;
+  --y2k-tokki-pink: #fbcfe8;
+  
+  --primary-color: #a78bfa; /* Lavender Y2K vibe */
+  --primary-hover: #8b5cf6;
+  --app-max-width: 1100px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* Helvetica font specified from Notion page */
+  font-family: 'Helvetica', 'Inter', 'Noto Sans KR', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: #111111;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px 0;
+}
+
+/* ==========================================
+   Y2K BACKDROP (Retro Cyber Grid & Auroras)
+   ========================================== */
+
+.y2k-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(135deg, #e2e8f0 0%, #d8b4fe 40%, #e9d5ff 70%, #c7d2fe 100%);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Y2K Grid Overlay */
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(129, 140, 248, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(129, 140, 248, 0.1) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+}
+
+/* Cyber glowing lights */
+.cyber-aurora-1, .cyber-aurora-2 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.cyber-aurora-1 {
+  width: 400px;
+  height: 400px;
+  top: -100px;
+  left: -50px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.5) 0%, rgba(129, 140, 248, 0) 70%);
+  animation: float-aurora 25s ease-in-out infinite alternate;
+}
+.cyber-aurora-2 {
+  width: 450px;
+  height: 450px;
+  bottom: -150px;
+  right: -50px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.45) 0%, rgba(167, 139, 250, 0) 70%);
+  animation: float-aurora 30s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes float-aurora {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 30px) scale(1.08); }
+}
+
+/* Floating Y2K Stars */
+.cyber-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.star-particle {
+  position: absolute;
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 0 0 6px rgba(167, 139, 250, 0.4);
+  animation: particle-pulsate 5s ease-in-out infinite alternate;
+}
+.p-1 { top: 12%; left: 8%; animation-delay: 0s; }
+.p-2 { top: 75%; left: 6%; animation-delay: 1.5s; }
+.p-3 { top: 22%; right: 28%; animation-delay: 0.8s; font-size: 1.6rem; }
+.p-4 { top: 68%; right: 10%; animation-delay: 2.3s; }
+
+@keyframes particle-pulsate {
+  0% { transform: scale(0.85) rotate(0deg); opacity: 0.3; }
+  100% { transform: scale(1.15) rotate(45deg); opacity: 0.85; }
+}
+
+/* ==========================================
+   INTERACTIVE Y2K CD PLAYER WIDGET
+   ========================================== */
+
+.y2k-cd-player {
+  position: absolute;
+  top: 30px;
+  right: 4%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 10;
+}
+
+@media (max-width: 950px) {
+  .y2k-cd-player {
+    display: none;
+  }
+}
+
+.cd-case {
+  width: 85px;
+  height: 85px;
+  background: rgba(255, 255, 255, 0.3);
+  border: 1.5px solid #111111;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 4px 4px 0px #111111;
+  transition: transform 0.2s;
+}
+.cd-case:hover {
+  transform: translateY(-2px) rotate(2deg);
+}
+
+.cd-vinyl {
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(circle, #2d3748 0%, #1a202c 40%, #0f172a 100%);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: spin-vinyl 12s linear infinite;
+  transition: animation-duration 0.5s;
+}
+
+.cd-shine {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 180deg,
+    rgba(236, 72, 153, 0.25) 0deg,
+    rgba(6, 182, 212, 0.2) 90deg,
+    rgba(167, 139, 250, 0.25) 180deg,
+    rgba(6, 182, 212, 0.2) 270deg,
+    rgba(236, 72, 153, 0.25) 360deg
+  );
+  mix-blend-mode: color-dodge;
+}
+
+.cd-center {
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle, #e2e8f0 30%, #94a3b8 70%);
+  border: 1.5px solid #111111;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.cd-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  background: #ffffff;
+  color: #111111;
+  border: 1.5px solid #111111;
+  padding: 3px 8px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 0px #111111;
+}
+
+@keyframes spin-vinyl {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==========================================
+   APP HEADER & CUTE FLAT TITLE
+   ========================================== */
+
+.app-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.title-container {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0;
+}
+
+/* Cute rounded flat title style (removing specular ballon gradient/filter) */
+.cute-title {
+  font-family: 'Genty', 'Jua', 'Gaegu', sans-serif;
+  font-size: 3.5rem;
+  font-weight: normal;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5px;
+  text-shadow: 2.5px 2.5px 0px #111111; /* Sharp flat black shadow */
+  letter-spacing: 1.5px;
+  user-select: none;
+  animation: float-title 3.5s ease-in-out infinite alternate;
+}
+
+.cute-title span {
+  display: inline-block;
+}
+
+.cute-title .space {
+  width: 15px;
+}
+
+@keyframes float-title {
+  0% { transform: translateY(0) rotate(-1deg); }
+  100% { transform: translateY(-7px) rotate(1deg); }
+}
+
+.subtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.15rem;
+  color: #111111;
+  margin-top: 5px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+/* ==========================================
+   CONTENT LAYOUT (PC vs Mobile Grid)
+   ========================================== */
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 30px;
+  align-items: center;
+  justify-items: center;
+}
+
+@media (max-width: 950px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* ==========================================
+   PHOTO WORKSPACE & RESPONSIVE FRAMES
+   ========================================== */
+
+.photo-workspace-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* Responsive Frame container (Vh-based scaling) */
+.frame-container {
+  position: relative;
+  background-color: #ffffff;
+  padding: 16px;
+  border: 1.5px solid #111111;
+  border-radius: 6px;
+  box-shadow: 6px 6px 0px #111111;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  user-select: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* 4-cut vertical frame dimensions */
+.format-four-cut {
+  height: 70vh;
+  max-height: 700px;
+  aspect-ratio: 3 / 7;
+  width: auto;
+}
+.format-four-cut .slots-grid {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  gap: 1.4vh;
+  flex: 1;
+}
+.format-four-cut .photo-slot {
+  width: 100%;
+  height: 100%;
+}
+
+/* Single-cut layout dimensions */
+.format-single-cut {
+  height: 52vh;
+  max-height: 500px;
+  aspect-ratio: 1 / 1.06;
+  width: auto;
+}
+.format-single-cut .slots-grid {
+  display: grid;
+  grid-template-rows: 1fr;
+  flex: 1;
+}
+.format-single-cut .photo-slot {
+  width: 100%;
+  height: 100%;
+}
+.format-single-cut #slot1,
+.format-single-cut #slot2,
+.format-single-cut #slot3 {
+  display: none;
+}
+
+/* Frame Corner Stars */
+.frame-decor-star {
+  position: absolute;
+  font-size: 1.2rem;
+  z-index: 45;
+  pointer-events: none;
+  color: #111111;
+}
+.frame-decor-star.top-left { top: 6px; left: 6px; }
+.frame-decor-star.top-right { top: 6px; right: 6px; }
+.frame-decor-star.bottom-left { bottom: 6px; left: 6px; }
+.frame-decor-star.bottom-right { bottom: 6px; right: 6px; }
+
+/* Photo Slots */
+.photo-slot {
+  position: relative;
+  background-color: #f3f4f6;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid #111111;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.photo-slot:hover {
+  transform: scale(1.01);
+}
+
+.photo-slot.active-capture {
+  outline: 3.5px solid var(--y2k-neon-pink);
+  outline-offset: -3.5px;
+  animation: slot-pulse 1.2s infinite alternate;
+}
+
+@keyframes slot-pulse {
+  0% { outline-color: var(--y2k-neon-pink); }
+  100% { outline-color: var(--y2k-cyber-blue); }
+}
+
+.slot-placeholder {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #6b7280;
+  gap: 4px;
+}
+.slot-icon {
+  font-size: 1.8rem;
+}
+.slot-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: bold;
+}
+
+.video-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.photo-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.retake-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ffffff;
+  border: 1.5px solid #111111;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px #111111;
+  z-index: 10;
+  transition: all 0.15s ease;
+}
+.retake-btn:hover {
+  transform: scale(1.1) rotate(45deg);
+}
+
+/* Overlays */
+.flash-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: white;
+  opacity: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+.flash-active {
+  animation: flash-animation 0.4s ease-out;
+}
+@keyframes flash-animation {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.countdown-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(2px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 90;
+  pointer-events: none;
+}
+.countdown-overlay.active {
+  display: flex;
+}
+#countdownNumber {
+  font-size: 6rem;
+  font-family: 'Alagard', 'Share Tech Mono', sans-serif;
+  color: #111111;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+  animation: count-ping 1s ease-in-out infinite;
+}
+
+.stickers-sandbox {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* Stickers Placed */
+.placed-sticker {
+  position: absolute;
+  pointer-events: auto;
+  cursor: move;
+  user-select: none;
+  display: inline-block;
+  padding: 4px;
+  transform-origin: center center;
+}
+
+.placed-sticker.selected {
+  outline: 1.5px dashed #111111;
+}
+
+.sticker-content {
+  font-size: 2.5rem;
+  display: inline-block;
+  line-height: 1;
+}
+
+/* Clean rectangular speech bubble */
+.sticker-text-content {
+  font-family: 'Inter', 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  font-size: 1.35rem;
+  white-space: nowrap;
+  background-color: #ffffff;
+  padding: 5px 12px;
+  border: 1.5px solid #111111;
+  box-shadow: 3px 3px 0px #111111;
+  color: #111111;
+}
+
+.sticker-delete-btn,
+.sticker-resize-handle {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background-color: #ffffff;
+  border: 1.5px solid #111111;
+  border-radius: 50%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  font-size: 9px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 1.5px 1.5px 0px #111111;
+  z-index: 10;
+}
+.sticker-delete-btn {
+  top: -9px;
+  right: -9px;
+  color: #ffffff;
+  background-color: var(--y2k-neon-pink);
+}
+.sticker-resize-handle {
+  bottom: -9px;
+  right: -9px;
+  color: #ffffff;
+  background-color: var(--y2k-cyber-blue);
+  cursor: se-resize;
+}
+
+.placed-sticker.selected .sticker-delete-btn,
+.placed-sticker.selected .sticker-resize-handle {
+  display: flex;
+}
+
+/* Frame Footer Details */
+.frame-footer-logo {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: 'Alagard', 'Share Tech Mono', monospace;
+  gap: 2px;
+}
+.footer-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111111;
+}
+.footer-date {
+  font-size: 0.8rem;
+  color: #4b5563;
+  font-weight: bold;
+}
+
+/* ==========================================
+   Y2K THEME SCENE STYLING (CLEAN BORDERS)
+   ========================================== */
+
+/* Theme 1: Cyber Chrome */
+.frame-style-cyber-chrome {
+  background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 50%, #e2e8f0 100%);
+  border: 2px solid #111111;
+  box-shadow: 6px 6px 0px #111111;
+}
+.frame-style-cyber-chrome .photo-slot {
+  border: 1.5px solid #111111;
+}
+
+/* Theme 2: Retro Tokki */
+.frame-style-retro-tokki {
+  background-color: #fdf2f8;
+  background-image: 
+    linear-gradient(#fbcfe8 1.5px, transparent 1.5px),
+    linear-gradient(90deg, #fbcfe8 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  border: 2px solid #111111;
+  box-shadow: 6px 6px 0px #111111;
+}
+.frame-style-retro-tokki .photo-slot {
+  border: 1.5px solid #111111;
+}
+
+/* Theme 3: Grunge Star */
+.frame-style-grunge-star {
+  background-color: #18181b;
+  background-image: radial-gradient(rgba(236, 72, 153, 0.12) 15%, transparent 16%);
+  background-size: 14px 14px;
+  border: 2px solid #111111;
+  box-shadow: 6px 6px 0px #111111;
+}
+.frame-style-grunge-star .photo-slot {
+  border: 1.5px solid #111111;
+}
+.frame-style-grunge-star .footer-title,
+.frame-style-grunge-star .footer-date,
+.frame-style-grunge-star .frame-decor-star {
+  color: #ffffff;
+}
+
+/* Theme 4: Classic Polaroid */
+.frame-style-classic-polaroid {
+  background-color: #fafaf9;
+  border: 1.5px solid #111111;
+  box-shadow: 6px 6px 0px #111111;
+}
+.frame-style-classic-polaroid .photo-slot {
+  border: 1.5px solid #cbd5e1;
+}
+
+/* Theme 5: Aero Glass */
+.frame-style-aero-glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.25) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid #111111;
+  box-shadow: 6px 6px 0px #111111;
+}
+.frame-style-aero-glass .photo-slot {
+  border: 1.5px solid #111111;
+}
+
+/* ==========================================
+   TOOLBOX SECTION (CLEAN FLAT Y2K)
+   ========================================== */
+
+.toolbox-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.toolbox-card {
+  background: #ffffff;
+  border: 1.5px solid #111111;
+  border-radius: 6px;
+  padding: 18px;
+  box-shadow: 4px 4px 0px #111111;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.toolbox-card:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #111111;
+}
+
+.toolbox-card h3 {
+  font-family: 'Helvetica', 'Inter', 'Noto Sans KR', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.control-btn {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 4px;
+  border: 1.5px solid #111111;
+  background: #ffffff;
+  font-family: 'Helvetica', 'Inter', 'Noto Sans KR', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111111;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px #111111;
+  transition: all 0.1s ease;
+}
+.control-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #111111;
+  background: #f9fafb;
+}
+.control-btn.active {
+  background: var(--primary-color);
+  color: #ffffff;
+  box-shadow: 2px 2px 0px #111111;
+}
+.control-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #111111;
+}
+
+.sub-control-panel {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1.5px dashed #111111;
+  animation: slide-down 0.2s ease-out;
+}
+
+.camera-select-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.camera-select-wrapper label {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #111111;
+}
+.styled-select {
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1.5px solid #111111;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  background: #ffffff;
+  outline: none;
+}
+
+.camera-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1.5px solid #111111;
+  font-family: 'Inter', 'Noto Sans KR', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px #111111;
+  transition: all 0.1s ease;
+}
+.action-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #111111;
+}
+.action-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #111111;
+}
+
+.primary-btn {
+  background: #a7f3d0;
+  color: #064e3b;
+}
+.primary-btn:hover {
+  background: #6ee7b7;
+}
+
+.capture-btn {
+  background: #fecaca;
+  color: #7f1d1d;
+}
+.capture-btn:hover {
+  background: #fca5a5;
+}
+
+.help-text {
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin-top: 8px;
+  line-height: 1.35;
+}
+
+/* Upload zone */
+.upload-area {
+  border: 2px dashed #111111;
+  border-radius: 4px;
+  padding: 24px 12px;
+  text-align: center;
+  cursor: pointer;
+  background: #f9fafb;
+  font-family: 'Helvetica', 'Inter', 'Noto Sans KR', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #4b5563;
+}
+.upload-area:hover {
+  background: #ede9fe;
+  color: #5b21b6;
+  border-color: var(--primary-color);
+}
+
+/* Frame themes scroll */
+.frame-themes-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 5px 0 10px 0;
+  scrollbar-width: thin;
+}
+.frame-themes-scroll::-webkit-scrollbar {
+  height: 5px;
+}
+.frame-themes-scroll::-webkit-scrollbar-thumb {
+  background: #111111;
+  border-radius: 2px;
+}
+
+.theme-card {
+  flex: 0 0 100px;
+  height: 65px;
+  border-radius: 4px;
+  border: 1.5px solid #111111;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4px;
+  box-shadow: 2px 2px 0px #111111;
+  transition: all 0.1s ease;
+}
+.theme-card:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #111111;
+}
+.theme-card.active {
+  transform: translate(-1.5px, -1.5px) scale(1.01);
+  box-shadow: 3.5px 3.5px 0px #111111;
+  border-color: var(--y2k-neon-pink);
+}
+.theme-name {
+  font-family: 'Helvetica', 'Inter', 'Noto Sans KR', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000;
+}
+.theme-card[data-theme="classic-polaroid"] .theme-name {
+  color: #111111;
+  text-shadow: none;
+}
+
+/* Sticker items */
+.sticker-selector {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.sticker-item {
+  font-size: 1.8rem;
+  background: #ffffff;
+  border: 1.5px solid #111111;
+  border-radius: 4px;
+  padding: 3px;
+  cursor: pointer;
+  box-shadow: 1.5px 1.5px 0px #111111;
+  transition: all 0.1s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.sticker-item:hover {
+  transform: translate(-1px, -1px) rotate(4deg);
+  box-shadow: 2.5px 2.5px 0px #111111;
+  background-color: #f3f4f6;
+}
+
+.sticker-text-add {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.sticker-text-add input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1.5px solid #111111;
+  font-family: 'Helvetica', 'Inter', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+}
+.sticker-text-add button {
+  padding: 0 12px;
+  font-size: 0.95rem;
+  background: #c084fc;
+  color: #ffffff;
+}
+
+.clear-btn {
+  background: #fee2e2;
+  color: #ef4444;
+  border: 1.5px solid #111111;
+  font-size: 0.95rem;
+  padding: 6px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 0px #111111;
+  margin-top: 4px;
+}
+
+/* Save / Download */
+.save-card {
+  background: #a78bfa;
+}
+.save-card h3 {
+  color: #ffffff;
+  border: none;
+  padding: 0;
+}
+.download-trigger-btn {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 4px;
+  border: 2px solid #111111;
+  background: #ffffff;
+  color: #111111;
+  font-family: 'Helvetica', 'Inter', 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px #111111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.1s ease;
+}
+.download-trigger-btn:hover {
+  transform: translate(-2px, -2px);
+  background-color: #f5f3ff;
+  box-shadow: 6px 6px 0px #111111;
+}
+.download-trigger-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #111111;
+}

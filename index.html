@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4th Anniversary - Y2K Photo Booth</title>
+  <!-- Load clean typography + cute rounded fonts for the title -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Jua&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Y2K Background: Retro Cyber Grid & Lavender Aura -->
+  <div class="y2k-background">
+    <div class="grid-overlay"></div>
+    <div class="cyber-aurora-1"></div>
+    <div class="cyber-aurora-2"></div>
+    <div class="cyber-particles">
+      <div class="star-particle p-1">✦</div>
+      <div class="star-particle p-2">✦</div>
+      <div class="star-particle p-3">✧</div>
+      <div class="star-particle p-4">✦</div>
+    </div>
+    
+    <!-- Rotating Y2K Hologram CD Player -->
+    <div class="y2k-cd-player" id="y2kCdPlayer" title="Click to spin!">
+      <div class="cd-case">
+        <div class="cd-vinyl">
+          <div class="cd-shine"></div>
+          <div class="cd-center"></div>
+        </div>
+      </div>
+      <div class="cd-label">Now Playing: DITTO 🎧</div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="app-container">
+    <!-- Cute Flat Typography Title Header -->
+    <header class="app-header">
+      <div class="title-container">
+        <h1 class="cute-title" id="cuteTitle">
+          <span style="color: #ff70a6;">4</span>
+          <span style="color: #ff70a6;">t</span>
+          <span style="color: #ff9770;">h</span>
+          <span class="space">&nbsp;</span>
+          <span style="color: #ffd670;">a</span>
+          <span style="color: #e9ff70;">n</span>
+          <span style="color: #70e8ff;">n</span>
+          <span style="color: #a78bfa;">n</span>
+          <span style="color: #f472b6;">i</span>
+          <span style="color: #fb7185;">v</span>
+          <span style="color: #fb923c;">e</span>
+          <span style="color: #38bdf8;">r</span>
+          <span style="color: #818cf8;">s</span>
+          <span style="color: #f472b6;">a</span>
+          <span style="color: #34d399;">r</span>
+          <span style="color: #a78bfa;">y</span>
+        </h1>
+      </div>
+      <p class="subtitle">✦ y2k digital memory pocket booth ✦</p>
+    </header>
+
+    <div class="content-wrapper">
+      <!-- LEFT: Photo Booth Workspace -->
+      <section class="photo-workspace-section">
+        <!-- Frame Layout Wrapper (responsive height-based container) -->
+        <div id="photoFrameContainer" class="frame-container format-four-cut frame-style-cyber-chrome">
+          <!-- Frame Sparkle Decors -->
+          <div class="frame-decor-star top-left">✦</div>
+          <div class="frame-decor-star top-right">✦</div>
+          <div class="frame-decor-star bottom-left">✧</div>
+          <div class="frame-decor-star bottom-right">✦</div>
+          
+          <!-- Flash effect overlay -->
+          <div class="flash-overlay" id="flashOverlay"></div>
+          
+          <!-- Countdown Overlay -->
+          <div class="countdown-overlay" id="countdownOverlay">
+            <span id="countdownNumber">3</span>
+          </div>
+
+          <!-- Photo slots grid -->
+          <div class="slots-grid" id="slotsGrid">
+            <!-- Slot 1 -->
+            <div class="photo-slot" data-slot="0" id="slot0">
+              <div class="slot-placeholder">
+                <span class="slot-icon">📸</span>
+                <span class="slot-text">cut 01</span>
+              </div>
+              <video class="video-preview hidden" autoplay playsinline muted></video>
+              <img class="photo-preview hidden" alt="Slot 1 Image">
+              <button class="retake-btn hidden" title="다시 촬영">🔄</button>
+            </div>
+            <!-- Slot 2 -->
+            <div class="photo-slot" data-slot="1" id="slot1">
+              <div class="slot-placeholder">
+                <span class="slot-icon">📸</span>
+                <span class="slot-text">cut 02</span>
+              </div>
+              <video class="video-preview hidden" autoplay playsinline muted></video>
+              <img class="photo-preview hidden" alt="Slot 2 Image">
+              <button class="retake-btn hidden" title="다시 촬영">🔄</button>
+            </div>
+            <!-- Slot 3 -->
+            <div class="photo-slot" data-slot="2" id="slot2">
+              <div class="slot-placeholder">
+                <span class="slot-icon">📸</span>
+                <span class="slot-text">cut 03</span>
+              </div>
+              <video class="video-preview hidden" autoplay playsinline muted></video>
+              <img class="photo-preview hidden" alt="Slot 3 Image">
+              <button class="retake-btn hidden" title="다시 촬영">🔄</button>
+            </div>
+            <!-- Slot 4 -->
+            <div class="photo-slot" data-slot="3" id="slot3">
+              <div class="slot-placeholder">
+                <span class="slot-icon">📸</span>
+                <span class="slot-text">cut 04</span>
+              </div>
+              <video class="video-preview hidden" autoplay playsinline muted></video>
+              <img class="photo-preview hidden" alt="Slot 4 Image">
+              <button class="retake-btn hidden" title="다시 촬영">🔄</button>
+            </div>
+          </div>
+
+          <!-- Decors and Sticker Sandbox -->
+          <div class="stickers-sandbox" id="stickersSandbox"></div>
+
+          <!-- Bottom Logo on the frame -->
+          <div class="frame-footer-logo" id="frameFooterLogo">
+            <span class="footer-title">✦ 4TH ANNIV. BESTIES ✦</span>
+            <span class="footer-date" id="currentDateStr">2026.06.01</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: Toolbox / Controls -->
+      <section class="toolbox-section">
+        <!-- Photo Mode Control -->
+        <div class="toolbox-card">
+          <h3>1. 입력 방식 선택</h3>
+          <div class="btn-group">
+            <button class="control-btn active" id="btnModeCamera">실시간 카메라</button>
+            <button class="control-btn" id="btnModeUpload">사진 업로드</button>
+          </div>
+          
+          <!-- Camera controls -->
+          <div class="sub-control-panel" id="cameraControlPanel">
+            <div class="camera-select-wrapper">
+              <label for="cameraSelect">카메라 장치:</label>
+              <select id="cameraSelect" class="styled-select">
+                <option value="">카메라 검색 중...</option>
+              </select>
+            </div>
+            <div class="camera-actions">
+              <button class="action-btn primary-btn" id="btnStartCamera">카메라 켜기</button>
+              <button class="action-btn capture-btn hidden" id="btnTriggerCapture">사진 촬영</button>
+            </div>
+            <p class="help-text">사진 슬롯을 눌러 활성화한 후, [사진 촬영]을 누르면 3초 후 촬영됩니다.</p>
+          </div>
+
+          <!-- Upload controls -->
+          <div class="sub-control-panel hidden" id="uploadControlPanel">
+            <div class="upload-area" id="dropZone">
+              <span>여기에 이미지를 드래그하거나<br>클릭하여 파일을 선택하세요.</span>
+              <input type="file" id="fileInput" accept="image/*" class="hidden">
+            </div>
+            <p class="help-text">활성화할 슬롯(1~4번)을 먼저 지정한 후 이미지를 선택하세요.</p>
+          </div>
+        </div>
+
+        <!-- Layout Controls -->
+        <div class="toolbox-card">
+          <h3>2. 레이아웃 선택</h3>
+          <div class="btn-group">
+            <button class="control-btn active" id="btnLayoutFour">인생네컷 (4-Cut)</button>
+            <button class="control-btn" id="btnLayoutSingle">단일 컷 (Single)</button>
+          </div>
+        </div>
+
+        <!-- Frame Style Controls -->
+        <div class="toolbox-card">
+          <h3>3. 프레임 테마 선택</h3>
+          <div class="frame-themes-scroll">
+            <button class="theme-card active" data-theme="cyber-chrome" style="background: linear-gradient(135deg, #cbd5e1, #94a3b8, #cbd5e1);">
+              <span class="theme-name">사이버 크롬</span>
+            </button>
+            <button class="theme-card" data-theme="retro-tokki" style="background: #fdf2f8; border: 1.5px dashed #f472b6; color: #db2777;">
+              <span class="theme-name">레트로 토끼</span>
+            </button>
+            <button class="theme-card" data-theme="grunge-star" style="background: #18181b; border: 1.5px solid #ec4899; color: #ec4899;">
+              <span class="theme-name">그런지 스타</span>
+            </button>
+            <button class="theme-card" data-theme="classic-polaroid" style="background: #fafaf9; border: 1.5px solid #cbd5e1; color: #444;">
+              <span class="theme-name">클래식 폴라</span>
+            </button>
+            <button class="theme-card" data-theme="aero-glass" style="background: linear-gradient(135deg, rgba(6,182,212,0.3), rgba(236,72,153,0.3)); border: 1.5px solid #06b6d4;">
+              <span class="theme-name">에어로 글래스</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sticker Toolbox -->
+        <div class="toolbox-card">
+          <h3>4. 스티커 꾸미기</h3>
+          <div class="sticker-selector">
+            <button class="sticker-item" data-sticker="🐰">🐰</button>
+            <button class="sticker-item" data-sticker="✦">✦</button>
+            <button class="sticker-item" data-sticker="✧">✧</button>
+            <button class="sticker-item" data-sticker="💿">💿</button>
+            <button class="sticker-item" data-sticker="🎀">🎀</button>
+            <button class="sticker-item" data-sticker="🍒">🍒</button>
+            <button class="sticker-item" data-sticker="🦋">🦋</button>
+            <button class="sticker-item" data-sticker="🎧">🎧</button>
+            <button class="sticker-item" data-sticker="💖">💖</button>
+            <button class="sticker-item" data-sticker="🎸">🎸</button>
+            <button class="sticker-item" data-sticker="💾">💾</button>
+            <button class="sticker-item" data-sticker="👾">👾</button>
+          </div>
+          <div class="sticker-text-add">
+            <input type="text" id="stickerTextInput" placeholder="말풍선 입력..." max="15">
+            <button id="btnCreateTextSticker" class="action-btn">추가</button>
+          </div>
+          <p class="help-text">스티커를 클릭하면 화면에 배치되며 드래그 이동, 핸들 조절로 회전 및 크기 조절이 가능합니다.</p>
+          <button class="action-btn clear-btn" id="btnClearStickers">스티커 전체 삭제</button>
+        </div>
+
+        <!-- Save & Share -->
+        <div class="toolbox-card save-card">
+          <h3>5. 완성 및 다운로드</h3>
+          <button class="download-trigger-btn" id="btnDownload">
+            💾 사진 다운로드
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Hidden Canvas for Composite rendering -->
+  <canvas id="compositeCanvas" style="display: none;"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>
