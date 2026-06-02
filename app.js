@@ -962,14 +962,13 @@ function drawStarPattern(ctx, cx, cy, spikes, outerRadius, innerRadius) {
   ctx.fill();
 }
 
-// Draw clean flat character by character title in cute font Jua onto canvas
+// Draw clean flat character by character title in cute font Genty onto canvas
 function drawCuteTitle(ctx, canvasWidth, canvasHeight) {
-  const text = "4th anniversary";
+  const text = "4cut Camera";
   const colors = [
-    "#ff70a6", "#ff70a6", "#ff9770", " ", 
-    "#ffd670", "#e9ff70", "#70e8ff", "#a78bfa", 
-    "#f472b6", "#fb7185", "#fb923c", "#38bdf8", 
-    "#818cf8", "#f472b6", "#34d399", "#a78bfa"
+    "#ff70a6", "#ff9770", "#ffd670", "#e9ff70", " ", 
+    "#70e8ff", "#a78bfa", "#f472b6", "#fb7185", "#38bdf8", 
+    "#34d399"
   ];
 
   ctx.save();
