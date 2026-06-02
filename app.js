@@ -333,7 +333,7 @@ async function startCameraStream() {
 
   const deviceId = cameraSelect.value;
   const constraints = {
-    video: deviceId ? { deviceId: { exact: deviceId }, width: 640, height: 480 } : { width: 640, height: 480 },
+    video: deviceId ? { deviceId: { exact: deviceId }, width: 640, height: 480 } : { facingMode: "user", width: 640, height: 480 },
     audio: false
   };
 
