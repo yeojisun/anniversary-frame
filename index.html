@@ -74,7 +74,7 @@
           <span style="color: #34d399;">a</span>
         </h1>
       </div>
-      <p class="subtitle">✦ y2k digital memory pocket booth ✦</p>
+      <p class="subtitle">Record your now</p>
     </header>
 
     <div class="content-wrapper">
@@ -209,22 +209,6 @@
           <div class="win-status-bar">
             <span class="status-message">For Help, click Help Topics on the Help Menu</span>
             <span class="status-date" id="currentDateStr">2026.06.01</span>
-          </div>
-        </div>
-
-        <!-- Y2K Interactive Natural Typography & Action Area -->
-        <div class="win-interactive-footer">
-          <h2 class="natural-title">Record your now</h2>
-          <p class="natural-subtitle">인위적이지 않은, 지금 이 순간의 가장 자연스러운 너를 기록해봐.</p>
-          
-          <div class="win-input-row">
-            <input type="text" id="stickerTextInput" placeholder="인위적이지 않은 마음을 남겨봐..." max="15">
-            <button id="btnCreateTextSticker" class="arrow-circle-btn" title="Add text sticker">➔</button>
-          </div>
-          
-          <button class="pill-download-btn" id="btnDownload">
-            Read more now
-          </button>
         </div>
       </section>
 
@@ -306,8 +290,20 @@
             <button class="sticker-item" data-sticker="💾">💾</button>
             <button class="sticker-item" data-sticker="👾">👾</button>
           </div>
+          <div class="sticker-text-add">
+            <input type="text" id="stickerTextInput" placeholder="말풍선 입력..." max="15">
+            <button id="btnCreateTextSticker" class="action-btn">추가</button>
+          </div>
           <p class="help-text">스티커를 클릭하면 화면에 배치되며 드래그 이동, 핸들 조절로 회전 및 크기 조절이 가능합니다.</p>
           <button class="action-btn clear-btn" id="btnClearStickers">스티커 전체 삭제</button>
+        </div>
+
+        <!-- Save & Share -->
+        <div class="toolbox-card save-card">
+          <h3>5. 완성 및 다운로드</h3>
+          <button class="download-trigger-btn" id="btnDownload">
+            💾 사진 다운로드
+          </button>
         </div>
       </section>
     </div>
