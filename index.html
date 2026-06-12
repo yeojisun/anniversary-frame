@@ -40,6 +40,25 @@
   <main class="app-container">
     <!-- Cute Flat Typography Title Header -->
     <header class="app-header">
+      <div class="win-logo-container">
+        <!-- Pixelated wavy Windows 95/98 Logo -->
+        <svg class="win-retro-logo" viewBox="0 0 100 80" width="80" height="64">
+          <!-- Shadow / trailing black pixels -->
+          <path d="M12 24h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm24-20h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4z" fill="#000000" />
+          <!-- Red segment (top left) -->
+          <path d="M16 12h16v4H16zm4 4h16v4H20zm4 4h16v4H24zm4 4h16v4H28z" fill="#ff4d4d" stroke="#000000" stroke-width="2.5" />
+          <!-- Green segment (top right) -->
+          <path d="M38 10h16v4H38zm4 4h16v4H42zm4 4h16v4H46zm4 4h16v4H50z" fill="#4dff4d" stroke="#000000" stroke-width="2.5" />
+          <!-- Blue segment (bottom left) -->
+          <path d="M12 30h16v4H12zm4 4h16v4H16zm4 4h16v4H20zm4 4h16v4H24z" fill="#3385ff" stroke="#000000" stroke-width="2.5" />
+          <!-- Yellow segment (bottom right) -->
+          <path d="M34 28h16v4H34zm4 4h16v4H38zm4 4h16v4H42zm4 4h16v4H46z" fill="#ffcc00" stroke="#000000" stroke-width="2.5" />
+          <!-- Wind trail dashes -->
+          <rect x="68" y="16" width="12" height="4" fill="#000000" />
+          <rect x="76" y="24" width="8" height="4" fill="#000000" />
+          <rect x="72" y="32" width="12" height="4" fill="#000000" />
+        </svg>
+      </div>
       <div class="title-container">
         <h1 class="cute-title" id="cuteTitle">
           <span style="color: #ff70a6;">4</span>
@@ -63,71 +82,149 @@
       <section class="photo-workspace-section">
         <!-- Frame Layout Wrapper (responsive height-based container) -->
         <div id="photoFrameContainer" class="frame-container format-four-cut frame-style-cyber-chrome">
-          <!-- Frame Sparkle Decors -->
-          <div class="frame-decor-star top-left">✦</div>
-          <div class="frame-decor-star top-right">✦</div>
-          <div class="frame-decor-star bottom-left">✧</div>
-          <div class="frame-decor-star bottom-right">✦</div>
+          <!-- Windows Title Bar -->
+          <div class="win-title-bar">
+            <span class="win-title-text"><span class="win-title-icon">🎨</span> Graphics editor</span>
+            <div class="win-control-buttons">
+              <span class="win-btn">_</span>
+              <span class="win-btn">🗖</span>
+              <span class="win-btn win-close">✕</span>
+            </div>
+          </div>
           
-          <!-- Flash effect overlay -->
-          <div class="flash-overlay" id="flashOverlay"></div>
+          <!-- Windows Menu Bar -->
+          <div class="win-menu-bar">
+            <span>File</span>
+            <span>Edit</span>
+            <span>View</span>
+            <span>Image</span>
+            <span>Colors</span>
+            <span>Help</span>
+          </div>
+
+          <!-- Windows Body Wrapper -->
+          <div class="win-body-wrapper">
+            <!-- Left Sidebar / Toolbar -->
+            <div class="win-sidebar">
+              <div class="toolbar-row">
+                <div class="toolbar-icon" title="Freeform Select">✂️</div>
+                <div class="toolbar-icon active" title="Select">⬚</div>
+              </div>
+              <div class="toolbar-row">
+                <div class="toolbar-icon" title="Eraser">🧽</div>
+                <div class="toolbar-icon" title="Fill Color">🪣</div>
+              </div>
+              <div class="toolbar-row">
+                <div class="toolbar-icon" title="Pick Color">🧪</div>
+                <div class="toolbar-icon" title="Magnifier">🔍</div>
+              </div>
+              <div class="toolbar-row">
+                <div class="toolbar-icon" title="Pencil">✏️</div>
+                <div class="toolbar-icon" title="Brush">🖌️</div>
+              </div>
+              <div class="toolbar-row">
+                <div class="toolbar-icon" title="Airbrush">💨</div>
+                <div class="toolbar-icon" title="Text">A</div>
+              </div>
+              <div class="toolbar-row">
+                <div class="toolbar-icon" title="Line">╱</div>
+                <div class="toolbar-icon" title="Curve">〰️</div>
+              </div>
+              <div class="toolbar-row">
+                <div class="toolbar-icon" title="Rectangle">▭</div>
+                <div class="toolbar-icon" title="Polygon">⬡</div>
+              </div>
+              <div class="toolbar-row">
+                <div class="toolbar-icon" title="Ellipse">◯</div>
+                <div class="toolbar-icon" title="Rounded Rectangle">▢</div>
+              </div>
+            </div>
+
+            <!-- Canvas Area containing slots and stickers -->
+            <div class="win-canvas-area">
+              <!-- Frame Sparkle Decors -->
+              <div class="frame-decor-star top-left">✦</div>
+              <div class="frame-decor-star top-right">✦</div>
+              <div class="frame-decor-star bottom-left">✧</div>
+              <div class="frame-decor-star bottom-right">✦</div>
+              
+              <!-- Flash effect overlay -->
+              <div class="flash-overlay" id="flashOverlay"></div>
+              
+              <!-- Countdown Overlay -->
+              <div class="countdown-overlay" id="countdownOverlay">
+                <span id="countdownNumber">3</span>
+              </div>
+
+              <!-- Photo slots grid -->
+              <div class="slots-grid" id="slotsGrid">
+                <!-- Slot 1 -->
+                <div class="photo-slot" data-slot="0" id="slot0">
+                  <div class="slot-placeholder">
+                    <span class="slot-icon">📸</span>
+                    <span class="slot-text">cut 01</span>
+                  </div>
+                  <video class="video-preview hidden" autoplay playsinline muted></video>
+                  <img class="photo-preview hidden" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Slot 1 Image">
+                  <button class="retake-btn hidden" title="다시 촬영">🔄</button>
+                </div>
+                <!-- Slot 2 -->
+                <div class="photo-slot" data-slot="1" id="slot1">
+                  <div class="slot-placeholder">
+                    <span class="slot-icon">📸</span>
+                    <span class="slot-text">cut 02</span>
+                  </div>
+                  <video class="video-preview hidden" autoplay playsinline muted></video>
+                  <img class="photo-preview hidden" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Slot 2 Image">
+                  <button class="retake-btn hidden" title="다시 촬영">🔄</button>
+                </div>
+                <!-- Slot 3 -->
+                <div class="photo-slot" data-slot="2" id="slot2">
+                  <div class="slot-placeholder">
+                    <span class="slot-icon">📸</span>
+                    <span class="slot-text">cut 03</span>
+                  </div>
+                  <video class="video-preview hidden" autoplay playsinline muted></video>
+                  <img class="photo-preview hidden" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Slot 3 Image">
+                  <button class="retake-btn hidden" title="다시 촬영">🔄</button>
+                </div>
+                <!-- Slot 4 -->
+                <div class="photo-slot" data-slot="3" id="slot3">
+                  <div class="slot-placeholder">
+                    <span class="slot-icon">📸</span>
+                    <span class="slot-text">cut 04</span>
+                  </div>
+                  <video class="video-preview hidden" autoplay playsinline muted></video>
+                  <img class="photo-preview hidden" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Slot 4 Image">
+                  <button class="retake-btn hidden" title="다시 촬영">🔄</button>
+                </div>
+
+                <!-- Decors and Sticker Sandbox -->
+                <div class="stickers-sandbox" id="stickersSandbox"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Windows Status Bar -->
+          <div class="win-status-bar">
+            <span class="status-message">For Help, click Help Topics on the Help Menu</span>
+            <span class="status-date" id="currentDateStr">2026.06.01</span>
+          </div>
+        </div>
+
+        <!-- Y2K Interactive Natural Typography & Action Area -->
+        <div class="win-interactive-footer">
+          <h2 class="natural-title">Record your now</h2>
+          <p class="natural-subtitle">인위적이지 않은, 지금 이 순간의 가장 자연스러운 너를 기록해봐.</p>
           
-          <!-- Countdown Overlay -->
-          <div class="countdown-overlay" id="countdownOverlay">
-            <span id="countdownNumber">3</span>
+          <div class="win-input-row">
+            <input type="text" id="stickerTextInput" placeholder="인위적이지 않은 마음을 남겨봐..." max="15">
+            <button id="btnCreateTextSticker" class="arrow-circle-btn" title="Add text sticker">➔</button>
           </div>
-
-          <!-- Photo slots grid -->
-          <div class="slots-grid" id="slotsGrid">
-            <!-- Slot 1 -->
-            <div class="photo-slot" data-slot="0" id="slot0">
-              <div class="slot-placeholder">
-                <span class="slot-icon">📸</span>
-                <span class="slot-text">cut 01</span>
-              </div>
-              <video class="video-preview hidden" autoplay playsinline muted></video>
-              <img class="photo-preview hidden" alt="Slot 1 Image">
-              <button class="retake-btn hidden" title="다시 촬영">🔄</button>
-            </div>
-            <!-- Slot 2 -->
-            <div class="photo-slot" data-slot="1" id="slot1">
-              <div class="slot-placeholder">
-                <span class="slot-icon">📸</span>
-                <span class="slot-text">cut 02</span>
-              </div>
-              <video class="video-preview hidden" autoplay playsinline muted></video>
-              <img class="photo-preview hidden" alt="Slot 2 Image">
-              <button class="retake-btn hidden" title="다시 촬영">🔄</button>
-            </div>
-            <!-- Slot 3 -->
-            <div class="photo-slot" data-slot="2" id="slot2">
-              <div class="slot-placeholder">
-                <span class="slot-icon">📸</span>
-                <span class="slot-text">cut 03</span>
-              </div>
-              <video class="video-preview hidden" autoplay playsinline muted></video>
-              <img class="photo-preview hidden" alt="Slot 3 Image">
-              <button class="retake-btn hidden" title="다시 촬영">🔄</button>
-            </div>
-            <!-- Slot 4 -->
-            <div class="photo-slot" data-slot="3" id="slot3">
-              <div class="slot-placeholder">
-                <span class="slot-icon">📸</span>
-                <span class="slot-text">cut 04</span>
-              </div>
-              <video class="video-preview hidden" autoplay playsinline muted></video>
-              <img class="photo-preview hidden" alt="Slot 4 Image">
-              <button class="retake-btn hidden" title="다시 촬영">🔄</button>
-            </div>
-          </div>
-
-          <!-- Decors and Sticker Sandbox -->
-          <div class="stickers-sandbox" id="stickersSandbox"></div>
-
-          <!-- Bottom Logo on the frame -->
-          <div class="frame-footer-logo" id="frameFooterLogo">
-            <span class="footer-date" id="currentDateStr">2026.06.01</span>
-          </div>
+          
+          <button class="pill-download-btn" id="btnDownload">
+            Read more now
+          </button>
         </div>
       </section>
 
@@ -209,20 +306,8 @@
             <button class="sticker-item" data-sticker="💾">💾</button>
             <button class="sticker-item" data-sticker="👾">👾</button>
           </div>
-          <div class="sticker-text-add">
-            <input type="text" id="stickerTextInput" placeholder="말풍선 입력..." max="15">
-            <button id="btnCreateTextSticker" class="action-btn">추가</button>
-          </div>
           <p class="help-text">스티커를 클릭하면 화면에 배치되며 드래그 이동, 핸들 조절로 회전 및 크기 조절이 가능합니다.</p>
           <button class="action-btn clear-btn" id="btnClearStickers">스티커 전체 삭제</button>
-        </div>
-
-        <!-- Save & Share -->
-        <div class="toolbox-card save-card">
-          <h3>5. 완성 및 다운로드</h3>
-          <button class="download-trigger-btn" id="btnDownload">
-            💾 사진 다운로드
-          </button>
         </div>
       </section>
     </div>

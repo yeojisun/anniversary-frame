@@ -333,7 +333,9 @@ async function startCameraStream() {
 
   const deviceId = cameraSelect.value;
   const constraints = {
-    video: deviceId ? { deviceId: { exact: deviceId }, width: 640, height: 480 } : { facingMode: "user", width: 640, height: 480 },
+    video: deviceId 
+      ? { deviceId: { exact: deviceId }, width: { ideal: 640 }, height: { ideal: 480 } } 
+      : { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } },
     audio: false
   };
 
@@ -567,7 +569,7 @@ function setupStickerInteractions(stickerEl, handleEl, sticker) {
     startY = clientY;
     
     const rect = stickerEl.getBoundingClientRect();
-    const parentRect = photoFrameContainer.getBoundingClientRect();
+    const parentRect = stickersSandbox.getBoundingClientRect();
     
     initialLeft = rect.left - parentRect.left + rect.width / 2;
     initialTop = rect.top - parentRect.top + rect.height / 2;
@@ -596,7 +598,7 @@ function setupStickerInteractions(stickerEl, handleEl, sticker) {
     
     const newX = initialLeft + dx;
     const newY = initialTop + dy;
-    const parentRect = photoFrameContainer.getBoundingClientRect();
+    const parentRect = stickersSandbox.getBoundingClientRect();
     
     const pctX = (newX / parentRect.width) * 100;
     const pctY = (newY / parentRect.height) * 100;
@@ -690,64 +692,366 @@ function setupStickerInteractions(stickerEl, handleEl, sticker) {
 
 // --- COMPOSITE HIGH RESOLUTION EXPORTER ---
 
+// --- COMPOSITE HIGH RESOLUTION EXPORTER ---
+
+function drawBevelRect(ctx, x, y, w, h, isPressed, bgColor) {
+  ctx.fillStyle = bgColor || '#d4d0c8';
+  ctx.fillRect(x, y, w, h);
+
+  ctx.lineWidth = 2;
+  if (isPressed) {
+    ctx.strokeStyle = '#808080';
+    ctx.beginPath();
+    ctx.moveTo(x, y + h);
+    ctx.lineTo(x, y);
+    ctx.lineTo(x + w, y);
+    ctx.stroke();
+
+    ctx.strokeStyle = '#000000';
+    ctx.beginPath();
+    ctx.moveTo(x + 1, y + h - 1);
+    ctx.lineTo(x + 1, y + 1);
+    ctx.lineTo(x + w - 1, y + 1);
+    ctx.stroke();
+
+    ctx.strokeStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.moveTo(x, y + h);
+    ctx.lineTo(x + w, y + h);
+    ctx.lineTo(x + w, y);
+    ctx.stroke();
+  } else {
+    ctx.strokeStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.moveTo(x, y + h);
+    ctx.lineTo(x, y);
+    ctx.lineTo(x + w, y);
+    ctx.stroke();
+
+    ctx.strokeStyle = '#808080';
+    ctx.beginPath();
+    ctx.moveTo(x + 1, y + h - 1);
+    ctx.lineTo(x + w - 1, y + h - 1);
+    ctx.lineTo(x + w - 1, y + 1);
+    ctx.stroke();
+
+    ctx.strokeStyle = '#000000';
+    ctx.beginPath();
+    ctx.moveTo(x, y + h);
+    ctx.lineTo(x + w, y + h);
+    ctx.lineTo(x + w, y);
+    ctx.stroke();
+  }
+}
+
 async function downloadComposite() {
   deselectAllStickers();
 
   const isFourCut = state.layoutMode === 'four-cut';
   const canvasWidth = 1200;
-  const canvasHeight = isFourCut ? 2800 : 1350;
+  const canvasHeight = isFourCut ? 2800 : 1450;
 
   compositeCanvas.width = canvasWidth;
   compositeCanvas.height = canvasHeight;
   const ctx = compositeCanvas.getContext('2d');
 
-  // 1. Draw Y2K Background style
-  drawThemeBackground(ctx, canvasWidth, canvasHeight);
+  // Load theme variables
+  let winBg = '#d4d0c8';
+  let titleGradStart = '#db2777';
+  let titleGradEnd = '#f472b6';
+  let workspaceBg = '#7f7f7f';
+  let slotsBg = '#ffffff';
+  let slotsBorder = '#111111';
+  let dateColor = '#4b5563';
+  let isGridWorkspace = false;
+  let isDarkTheme = false;
 
-  // 2. Draw slots
-  const paddingX = canvasWidth * 0.06;
-  const topOffset = canvasHeight * 0.06; 
-  const slotSpacing = canvasHeight * 0.015;
+  if (state.theme === 'retro-tokki') {
+    winBg = '#fce7f3';
+    titleGradStart = '#c084fc';
+    titleGradEnd = '#f472b6';
+    workspaceBg = '#fdf2f8';
+    isGridWorkspace = true;
+    slotsBg = '#ffffff';
+    slotsBorder = '#f472b6';
+    dateColor = '#db2777';
+  } else if (state.theme === 'grunge-star') {
+    winBg = '#27272a';
+    titleGradStart = '#ec4899';
+    titleGradEnd = '#8b5cf6';
+    workspaceBg = '#09090b';
+    slotsBg = '#18181b';
+    slotsBorder = '#ec4899';
+    dateColor = '#ffffff';
+    isDarkTheme = true;
+  } else if (state.theme === 'classic-polaroid') {
+    winBg = '#f5f5f4';
+    titleGradStart = '#292524';
+    titleGradEnd = '#57534e';
+    workspaceBg = '#e7e5e4';
+    slotsBg = '#ffffff';
+    slotsBorder = '#cbd5e1';
+  } else if (state.theme === 'aero-glass') {
+    winBg = '#e0f2fe';
+    titleGradStart = '#06b6d4';
+    titleGradEnd = '#ec4899';
+    workspaceBg = '#f0f9ff';
+    slotsBg = '#ffffff';
+    slotsBorder = '#111111';
+  }
+
+  // 1. Draw outer window frame
+  drawBevelRect(ctx, 0, 0, canvasWidth, canvasHeight, false, winBg);
+
+  // 2. Draw Title Bar
+  const titleBarH = 90;
+  const titleGrad = ctx.createLinearGradient(10, 10, canvasWidth - 20, 10);
+  titleGrad.addColorStop(0, titleGradStart);
+  titleGrad.addColorStop(1, titleGradEnd);
+  ctx.fillStyle = titleGrad;
+  ctx.fillRect(10, 10, canvasWidth - 20, titleBarH);
+
+  // Draw wavy pixel Windows flag logo
+  const logoX = 24;
+  const logoY = 10 + (titleBarH - 40) / 2;
+  ctx.fillStyle = '#ff4d4d';
+  ctx.fillRect(logoX, logoY, 14, 12);
+  ctx.fillStyle = '#4dff4d';
+  ctx.fillRect(logoX + 16, logoY - 2, 14, 12);
+  ctx.fillStyle = '#3385ff';
+  ctx.fillRect(logoX - 2, logoY + 14, 14, 12);
+  ctx.fillStyle = '#ffcc00';
+  ctx.fillRect(logoX + 14, logoY + 12, 14, 12);
+
+  // Title text
+  ctx.font = 'bold 36px sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText("Graphics editor", logoX + 44, 10 + titleBarH / 2);
+
+  // Control buttons on titlebar
+  const btnSize = 34;
+  const btnY = 10 + (titleBarH - btnSize) / 2;
+  const rightOffset = canvasWidth - 10 - 20;
   
+  const drawBtnSymbol = (bX, type) => {
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 3;
+    if (type === 'min') {
+      ctx.beginPath();
+      ctx.moveTo(bX + 8, btnY + btnSize - 10);
+      ctx.lineTo(bX + btnSize - 8, btnY + btnSize - 10);
+      ctx.stroke();
+    } else if (type === 'max') {
+      ctx.strokeRect(bX + 8, btnY + 8, btnSize - 16, btnSize - 16);
+      ctx.fillRect(bX + 8, btnY + 8, btnSize - 16, 5);
+    } else if (type === 'close') {
+      ctx.beginPath();
+      ctx.moveTo(bX + 9, btnY + 9);
+      ctx.lineTo(bX + btnSize - 9, btnY + btnSize - 9);
+      ctx.moveTo(bX + btnSize - 9, btnY + 9);
+      ctx.lineTo(bX + 9, btnY + btnSize - 9);
+      ctx.stroke();
+    }
+  };
+
+  const btnTypes = ['min', 'max', 'close'];
+  btnTypes.forEach((type, idx) => {
+    const bX = rightOffset - (3 - idx) * (btnSize + 6);
+    drawBevelRect(ctx, bX, btnY, btnSize, btnSize, false, winBg);
+    drawBtnSymbol(bX, type);
+  });
+
+  // 3. Draw Menu Bar
+  const menuBarY = 10 + titleBarH;
+  const menuBarH = 60;
+  ctx.fillStyle = winBg;
+  ctx.fillRect(10, menuBarY, canvasWidth - 20, menuBarH);
+  
+  ctx.font = '26px sans-serif';
+  ctx.fillStyle = isDarkTheme ? '#ec4899' : '#000000';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText("File     Edit     View     Image     Colors     Help", 30, menuBarY + menuBarH / 2);
+
+  // Thin separator under menu bar
+  ctx.strokeStyle = '#808080';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(10, menuBarY + menuBarH);
+  ctx.lineTo(canvasWidth - 10, menuBarY + menuBarH);
+  ctx.stroke();
+
+  // 4. Draw Status Bar
+  const statusBarH = 70;
+  const statusBarY = canvasHeight - 10 - statusBarH;
+  
+  // Left status message field
+  const msgW = canvasWidth - 20 - 260;
+  drawBevelRect(ctx, 10 + 6, statusBarY + 12, msgW, statusBarH - 24, true, winBg);
+  ctx.font = '24px sans-serif';
+  ctx.fillStyle = isDarkTheme ? '#ec4899' : '#000000';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText("For Help, click Help Topics on the Help Menu", 30, statusBarY + statusBarH / 2);
+
+  // Right date field
+  const dateFieldX = 10 + 6 + msgW + 12;
+  const dateFieldW = 220;
+  drawBevelRect(ctx, dateFieldX, statusBarY + 12, dateFieldW, statusBarH - 24, true, winBg);
+  ctx.font = `bold 22px 'Share Tech Mono', monospace`;
+  ctx.textAlign = 'center';
+  ctx.fillText(currentDateStr.textContent, dateFieldX + dateFieldW / 2, statusBarY + statusBarH / 2);
+
+  // 5. Draw Sidebar
+  const sidebarW = 120;
+  const bodyY = menuBarY + menuBarH + 2;
+  const bodyH = statusBarY - bodyY - 2;
+  drawBevelRect(ctx, 10, bodyY, sidebarW, bodyH, true, winBg);
+
+  // Draw 2x8 buttons in Sidebar
+  const cols = 2;
+  const rows = 8;
+  const bW = 46;
+  const bH = 44;
+  const bGap = 8;
+  const startX = 10 + (sidebarW - (cols * bW + (cols - 1) * bGap)) / 2;
+  const startY = bodyY + 18;
+
+  const toolbarIcons = [
+    "✂️", "⬚",
+    "🧽", "🪣",
+    "🧪", "🔍",
+    "✏️", "🖌️",
+    "💨", "A",
+    "╱", "〰️",
+    "▭", "⬡",
+    "◯", "▢"
+  ];
+
+  ctx.font = '22px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const idx = r * cols + c;
+      const tX = startX + c * (bW + bGap);
+      const tY = startY + r * (bH + bGap);
+      
+      const isActive = idx === 1; // "⬚" tool active
+      drawBevelRect(ctx, tX, tY, bW, bH, isActive, winBg);
+      ctx.fillStyle = '#000000';
+      ctx.fillText(toolbarIcons[idx], tX + bW / 2, tY + bH / 2);
+    }
+  }
+
+  // 6. Draw Workspace (Canvas Area)
+  const canvasAreaX = 10 + sidebarW + 4;
+  const canvasAreaW = canvasWidth - 10 - canvasAreaX;
+  drawBevelRect(ctx, canvasAreaX, bodyY, canvasAreaW, bodyH, true, workspaceBg);
+
+  // Clip workspace for background effects
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(canvasAreaX + 2, bodyY + 2, canvasAreaW - 4, bodyH - 4);
+  ctx.clip();
+
+  if (isGridWorkspace) {
+    ctx.strokeStyle = '#fbcfe8';
+    ctx.lineWidth = 2;
+    const gridS = 32;
+    for (let gx = canvasAreaX; gx < canvasAreaX + canvasAreaW; gx += gridS) {
+      ctx.beginPath();
+      ctx.moveTo(gx, bodyY);
+      ctx.lineTo(gx, bodyY + bodyH);
+      ctx.stroke();
+    }
+    for (let gy = bodyY; gy < bodyY + bodyH; gy += gridS) {
+      ctx.beginPath();
+      ctx.moveTo(canvasAreaX, gy);
+      ctx.lineTo(canvasAreaX + canvasAreaW, gy);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+
+  // 7. Draw Photo Strip centered inside workspace
+  const stripWidth = 780;
+  const stripHeight = isFourCut ? 1900 : 880;
+  const stripX = canvasAreaX + (canvasAreaW - stripWidth) / 2;
+  const stripY = bodyY + (bodyH - stripHeight) / 2;
+
+  ctx.fillStyle = slotsBg;
+  ctx.fillRect(stripX, stripY, stripWidth, stripHeight);
+  ctx.strokeStyle = slotsBorder;
+  ctx.lineWidth = 8;
+  ctx.strokeRect(stripX, stripY, stripWidth, stripHeight);
+
+  // Tokki dashed outline
+  if (state.theme === 'retro-tokki') {
+    ctx.strokeStyle = '#f472b6';
+    ctx.lineWidth = 6;
+    ctx.setLineDash([15, 10]);
+    ctx.strokeRect(stripX + 14, stripY + 14, stripWidth - 28, stripHeight - 28);
+    ctx.setLineDash([]);
+  }
+
+  // Draw Photo Slots
+  const paddingX = stripWidth * 0.07;
+  const topOffset = stripHeight * 0.065;
+  const slotSpacing = stripHeight * 0.015;
   const slotCount = isFourCut ? 4 : 1;
-  const availableHeight = canvasHeight - topOffset - (canvasHeight * 0.08) - (slotSpacing * (slotCount - 1));
+  const footerHeight = stripHeight * 0.085;
+  
+  const availableHeight = stripHeight - topOffset - footerHeight - (slotSpacing * (slotCount - 1));
   const slotHeight = availableHeight / slotCount;
-  const slotWidth = canvasWidth - (paddingX * 2);
+  const slotWidth = stripWidth - (paddingX * 2);
 
   for (let i = 0; i < slotCount; i++) {
-    const x = paddingX;
-    const y = topOffset + i * (slotHeight + slotSpacing);
+    const x = stripX + paddingX;
+    const y = stripY + topOffset + i * (slotHeight + slotSpacing);
 
-    ctx.fillStyle = '#f9fafb';
+    ctx.fillStyle = isDarkTheme ? '#18181b' : '#f3f4f6';
     ctx.fillRect(x, y, slotWidth, slotHeight);
 
     const imgData = state.capturedImages[i];
     if (imgData) {
       await drawImageCropped(ctx, imgData, x, y, slotWidth, slotHeight);
     } else {
-      ctx.fillStyle = '#9ca3af';
+      ctx.fillStyle = isDarkTheme ? '#a1a1aa' : '#9ca3af';
       ctx.font = `bold ${slotHeight * 0.12}px 'Share Tech Mono', sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('EMPTY SLOT ✦', x + slotWidth / 2, y + slotHeight / 2);
+      ctx.fillText(`cut 0${i + 1} ✦`, x + slotWidth / 2, y + slotHeight / 2);
     }
 
-    // Outer line around photo slots
-    ctx.strokeStyle = '#111111';
+    ctx.strokeStyle = slotsBorder;
     ctx.lineWidth = 6;
     ctx.strokeRect(x, y, slotWidth, slotHeight);
   }
 
-  // 3. Draw footer logo text
-  drawFrameOverlays(ctx, canvasWidth, canvasHeight);
+  // Draw Cute Character Title at the top of the photo strip
+  drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight);
 
-  // 4. Draw placed stickers
-  drawStickers(ctx, canvasWidth, canvasHeight);
+  // Draw Date at the bottom of the photo strip
+  const dateY = stripY + stripHeight - (footerHeight / 2);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font = `bold ${stripWidth * 0.045}px 'Share Tech Mono', monospace`;
+  ctx.fillStyle = dateColor;
+  ctx.fillText(currentDateStr.textContent, stripX + stripWidth / 2, dateY);
 
-  // 5. Render flat cute title at the top
-  drawCuteTitle(ctx, canvasWidth, canvasHeight);
+  // 8. Draw Placed Stickers mapped to the photo strip slots area
+  const sandboxX = stripX + paddingX;
+  const sandboxY = stripY + topOffset;
+  const sandboxW = slotWidth;
+  const sandboxH = availableHeight + (slotSpacing * (slotCount - 1));
 
-  // Download Action
+  drawStickers(ctx, sandboxX, sandboxY, sandboxW, sandboxH);
+
+  // 9. Download file trigger
   const dataUrl = compositeCanvas.toDataURL('image/png');
   const link = document.createElement('a');
   link.download = `our_4th_anniversary_${isFourCut ? '4cut' : 'single'}.png`;
@@ -755,87 +1059,6 @@ async function downloadComposite() {
   link.click();
 }
 
-// Draw Y2K Styled Backgrounds for High-Res Print
-function drawThemeBackground(ctx, width, height) {
-  const theme = state.theme;
-
-  if (theme === 'cyber-chrome') {
-    const grad = ctx.createLinearGradient(0, 0, width, height);
-    grad.addColorStop(0, '#f1f5f9');
-    grad.addColorStop(0.5, '#cbd5e1');
-    grad.addColorStop(1, '#cbd5e1');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, width, height);
-
-    ctx.strokeStyle = '#111111';
-    ctx.lineWidth = 12;
-    ctx.strokeRect(6, 6, width - 12, height - 12);
-
-  } else if (theme === 'retro-tokki') {
-    ctx.fillStyle = '#fdf2f8';
-    ctx.fillRect(0, 0, width, height);
-
-    // Pink Grid Line Patterns
-    ctx.strokeStyle = '#fbcfe8';
-    ctx.lineWidth = 3;
-    const gridSize = 50;
-    for (let x = 0; x < width; x += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, height);
-      ctx.stroke();
-    }
-    for (let y = 0; y < height; y += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(width, y);
-      ctx.stroke();
-    }
-
-    ctx.strokeStyle = '#111111';
-    ctx.lineWidth = 12;
-    ctx.strokeRect(6, 6, width - 12, height - 12);
-
-  } else if (theme === 'grunge-star') {
-    ctx.fillStyle = '#18181b';
-    ctx.fillRect(0, 0, width, height);
-
-    ctx.fillStyle = 'rgba(236, 72, 153, 0.06)';
-    for (let i = 0; i < 6; i++) {
-      const cx = Math.random() * width;
-      const cy = Math.random() * height;
-      drawStarPattern(ctx, cx, cy, 4, 160, 35);
-    }
-
-    ctx.strokeStyle = '#111111';
-    ctx.lineWidth = 12;
-    ctx.strokeRect(6, 6, width - 12, height - 12);
-
-  } else if (theme === 'classic-polaroid') {
-    ctx.fillStyle = '#fafaf9';
-    ctx.fillRect(0, 0, width, height);
-
-    ctx.strokeStyle = '#111111';
-    ctx.lineWidth = 10;
-    ctx.strokeRect(5, 5, width - 10, height - 10);
-
-  } else if (theme === 'aero-glass') {
-    const grad = ctx.createLinearGradient(0, 0, width, height);
-    grad.addColorStop(0, '#e0f2fe');
-    grad.addColorStop(1, '#fce7f3');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, width, height);
-
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-    ctx.fillRect(15, 15, width - 30, height - 30);
-
-    ctx.strokeStyle = '#111111';
-    ctx.lineWidth = 12;
-    ctx.strokeRect(10, 10, width - 20, height - 20);
-  }
-}
-
-// Center crop image placement logic
 function drawImageCropped(ctx, dataUrl, destX, destY, destWidth, destHeight) {
   return new Promise((resolve) => {
     const img = new Image();
@@ -867,25 +1090,10 @@ function drawImageCropped(ctx, dataUrl, destX, destY, destWidth, destHeight) {
   });
 }
 
-// Draw Frame Footer Text in clean modern sans-serif/monospace font
-function drawFrameOverlays(ctx, width, height) {
-  const dateStr = currentDateStr.textContent;
-  const footerY = height - (height * 0.04);
-
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-
-  // Use clean Share Tech Mono for the date
-  ctx.font = `bold ${width * 0.032}px 'Share Tech Mono', monospace`;
-  ctx.fillStyle = '#4b5563';
-  ctx.fillText(dateStr, width / 2, footerY);
-}
-
-// Draw Stickers onto composite high-res Canvas
-function drawStickers(ctx, canvasWidth, canvasHeight) {
+function drawStickers(ctx, sandboxX, sandboxY, sandboxW, sandboxH) {
   state.stickers.forEach(sticker => {
-    const x = (sticker.x / 100) * canvasWidth;
-    const y = (sticker.y / 100) * canvasHeight;
+    const x = sandboxX + (sticker.x / 100) * sandboxW;
+    const y = sandboxY + (sticker.y / 100) * sandboxH;
 
     ctx.save();
     ctx.translate(x, y);
@@ -895,41 +1103,40 @@ function drawStickers(ctx, canvasWidth, canvasHeight) {
     if (sticker.type === 'emoji') {
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      const baseFontSize = canvasWidth * 0.075;
+      const baseFontSize = sandboxW * 0.12;
       ctx.font = `${baseFontSize}px Arial, Apple Color Emoji, Segoe UI Emoji`;
       ctx.fillText(sticker.content, 0, 0);
     } else {
-      // Y2K Rectangular Speech Bubble with solid black borders
       const text = sticker.content;
+      const baseFontSize = sandboxW * 0.055;
       
-      // Clean modern typography for text bubble
-      ctx.font = `bold ${canvasWidth * 0.032}px 'Inter', 'Noto Sans KR', sans-serif`;
+      ctx.font = `bold ${baseFontSize}px 'Inter', 'Noto Sans KR', sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       
       const metrics = ctx.measureText(text);
       const textWidth = metrics.width;
-      const textHeight = canvasWidth * 0.032;
+      const textHeight = baseFontSize;
 
-      const paddingW = 20;
-      const paddingH = 10;
+      const paddingW = baseFontSize * 0.5;
+      const paddingH = baseFontSize * 0.28;
       const rectW = textWidth + paddingW * 2;
       const rectH = textHeight + paddingH * 2;
 
-      // Solid Y2K Black Offset shadow
+      // Solid black offset shadow
       ctx.fillStyle = '#111111';
-      ctx.fillRect(-rectW / 2 + 6, -rectH / 2 + 6, rectW, rectH);
+      ctx.fillRect(-rectW / 2 + 5, -rectH / 2 + 5, rectW, rectH);
 
       // Core white panel
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(-rectW / 2, -rectH / 2, rectW, rectH);
       
-      // Flat solid black border
+      // Border
       ctx.strokeStyle = '#111111';
-      ctx.lineWidth = 5;
+      ctx.lineWidth = 4;
       ctx.strokeRect(-rectW / 2, -rectH / 2, rectW, rectH);
 
-      // Print clean text inside bubble
+      // Text
       ctx.fillStyle = '#111111';
       ctx.fillText(text, 0, 0);
     }
@@ -938,32 +1145,7 @@ function drawStickers(ctx, canvasWidth, canvasHeight) {
   });
 }
 
-function drawStarPattern(ctx, cx, cy, spikes, outerRadius, innerRadius) {
-  let rot = Math.PI / 2 * 3;
-  let x = cx;
-  let y = cy;
-  let step = Math.PI / spikes;
-
-  ctx.beginPath();
-  ctx.moveTo(cx, cy - outerRadius);
-  for (let i = 0; i < spikes; i++) {
-    x = cx + Math.cos(rot) * outerRadius;
-    y = cy + Math.sin(rot) * outerRadius;
-    ctx.lineTo(x, y);
-    rot += step;
-
-    x = cx + Math.cos(rot) * innerRadius;
-    y = cy + Math.sin(rot) * innerRadius;
-    ctx.lineTo(x, y);
-    rot += step;
-  }
-  ctx.lineTo(cx, cy - outerRadius);
-  ctx.closePath();
-  ctx.fill();
-}
-
-// Draw clean flat character by character title in cute font Genty onto canvas
-function drawCuteTitle(ctx, canvasWidth, canvasHeight) {
+function drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight) {
   const text = "4cut Camera";
   const colors = [
     "#ff70a6", "#ff9770", "#ffd670", "#e9ff70", " ", 
@@ -975,20 +1157,20 @@ function drawCuteTitle(ctx, canvasWidth, canvasHeight) {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   
-  const fontSize = canvasWidth * 0.075;
+  const fontSize = stripWidth * 0.082;
   ctx.font = `bold ${fontSize}px 'Genty', 'Jua', 'Gaegu', sans-serif`;
   
   let totalWidth = 0;
   const charWidths = [];
   for (let i = 0; i < text.length; i++) {
     const char = text[i];
-    const width = char === " " ? fontSize * 0.28 : ctx.measureText(char).width;
+    const width = char === " " ? fontSize * 0.25 : ctx.measureText(char).width;
     charWidths.push(width);
     totalWidth += width;
   }
 
-  let currentX = (canvasWidth - totalWidth) / 2;
-  const y = canvasHeight * 0.032;
+  let currentX = stripX + (stripWidth - totalWidth) / 2;
+  const y = stripY + (stripHeight * 0.034);
 
   for (let i = 0; i < text.length; i++) {
     const char = text[i];
@@ -1000,7 +1182,7 @@ function drawCuteTitle(ctx, canvasWidth, canvasHeight) {
       ctx.fillStyle = "#111111";
       ctx.fillText(char, currentX + charW / 2 + 5, y + 5);
 
-      // Cute flat color fill
+      // Cute color fill
       ctx.fillStyle = color;
       ctx.fillText(char, currentX + charW / 2, y);
     }
