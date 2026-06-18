@@ -177,7 +177,10 @@ function setupEventListeners() {
   });
 
   stickerItems.forEach(item => {
-    item.addEventListener('click', () => addSticker('emoji', item.dataset.sticker));
+    item.addEventListener('click', () => {
+      const type = item.classList.contains('img-sticker') ? 'image' : 'emoji';
+      addSticker(type, item.dataset.sticker);
+    });
   });
 
   btnCreateTextSticker.addEventListener('click', () => {
@@ -491,15 +494,26 @@ function renderStickerDOM(sticker) {
   stickerEl.style.top = `${sticker.y}%`;
   stickerEl.style.transform = `translate(-50%, -50%) scale(${sticker.scale}) rotate(${sticker.rotation}rad)`;
 
-  const contentEl = document.createElement('span');
   if (sticker.type === 'emoji') {
+    const contentEl = document.createElement('span');
     contentEl.classList.add('sticker-content');
     contentEl.textContent = sticker.content;
+    stickerEl.appendChild(contentEl);
+  } else if (sticker.type === 'image') {
+    const imgEl = document.createElement('img');
+    imgEl.src = sticker.content;
+    imgEl.classList.add('sticker-image-content');
+    imgEl.style.width = '80px';
+    imgEl.style.height = 'auto';
+    imgEl.style.pointerEvents = 'none';
+    imgEl.style.userSelect = 'none';
+    stickerEl.appendChild(imgEl);
   } else {
+    const contentEl = document.createElement('span');
     contentEl.classList.add('sticker-text-content');
     contentEl.textContent = sticker.content;
+    stickerEl.appendChild(contentEl);
   }
-  stickerEl.appendChild(contentEl);
 
   const delBtn = document.createElement('div');
   delBtn.classList.add('sticker-delete-btn');
@@ -1049,7 +1063,7 @@ async function downloadComposite() {
   const sandboxW = slotWidth;
   const sandboxH = availableHeight + (slotSpacing * (slotCount - 1));
 
-  drawStickers(ctx, sandboxX, sandboxY, sandboxW, sandboxH);
+  await drawStickers(ctx, sandboxX, sandboxY, sandboxW, sandboxH);
 
   // 9. Download file trigger
   const dataUrl = compositeCanvas.toDataURL('image/png');
@@ -1090,8 +1104,8 @@ function drawImageCropped(ctx, dataUrl, destX, destY, destWidth, destHeight) {
   });
 }
 
-function drawStickers(ctx, sandboxX, sandboxY, sandboxW, sandboxH) {
-  state.stickers.forEach(sticker => {
+async function drawStickers(ctx, sandboxX, sandboxY, sandboxW, sandboxH) {
+  for (const sticker of state.stickers) {
     const x = sandboxX + (sticker.x / 100) * sandboxW;
     const y = sandboxY + (sticker.y / 100) * sandboxH;
 
@@ -1106,6 +1120,18 @@ function drawStickers(ctx, sandboxX, sandboxY, sandboxW, sandboxH) {
       const baseFontSize = sandboxW * 0.12;
       ctx.font = `${baseFontSize}px Arial, Apple Color Emoji, Segoe UI Emoji`;
       ctx.fillText(sticker.content, 0, 0);
+    } else if (sticker.type === 'image') {
+      const drawW = sandboxW * 0.22;
+      await new Promise((resolve) => {
+        const img = new Image();
+        img.src = sticker.content;
+        img.onload = () => {
+          const drawH = drawW * (img.height / img.width || 1);
+          ctx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH);
+          resolve();
+        };
+        img.onerror = () => resolve();
+      });
     } else {
       const text = sticker.content;
       const baseFontSize = sandboxW * 0.055;
@@ -1142,7 +1168,7 @@ function drawStickers(ctx, sandboxX, sandboxY, sandboxW, sandboxH) {
     }
 
     ctx.restore();
-  });
+  }
 }
 
 function drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight) {

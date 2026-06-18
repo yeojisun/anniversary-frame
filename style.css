@@ -1311,3 +1311,11 @@ body {
     font-size: 0.7rem;
   }
 }
+
+.sticker-image-content {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
