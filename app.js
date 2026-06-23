@@ -1172,63 +1172,80 @@ async function drawStickers(ctx, sandboxX, sandboxY, sandboxW, sandboxH) {
 }
 
 function drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight) {
-  const text = "4cut Camera";
-  const colors = [
-    "#ff70a6", "#ff9770", "#ffd670", "#e9ff70", " ", 
-    "#70e8ff", "#a78bfa", "#f472b6", "#fb7185", "#38bdf8", 
-    "#34d399"
-  ];
-
-  ctx.save();
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  
-  const fontSize = stripWidth * 0.082;
-  ctx.font = `bold ${fontSize}px 'Genty', 'Jua', 'Gaegu', sans-serif`;
-  
-  let totalWidth = 0;
-  const charWidths = [];
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    const width = char === " " ? fontSize * 0.25 : ctx.measureText(char).width;
-    charWidths.push(width);
-    totalWidth += width;
-  }
-
-  let currentX = stripX + (stripWidth - totalWidth) / 2;
-  const y = stripY + (stripHeight * 0.034);
-
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    const charW = charWidths[i];
-    const color = colors[i];
-
-    if (char !== " ") {
-      const charMidX = currentX + charW / 2;
-
-      // 1. Draw flat shadow
-      ctx.fillStyle = "#111111";
-      ctx.fillText(char, charMidX + 5, y + 5);
-
-      // 2. Draw black stroke outline
-      ctx.strokeStyle = "#111111";
-      ctx.lineWidth = 6;
-      ctx.strokeText(char, charMidX, y);
-
-      // 3. Draw gradient fill (white glossy highlight + pastel color)
-      const charGrad = ctx.createLinearGradient(currentX, y - fontSize / 2, currentX + charW, y + fontSize / 2);
-      charGrad.addColorStop(0, '#ffffff');
-      charGrad.addColorStop(0.18, '#ffffff');
-      charGrad.addColorStop(0.38, color);
-      charGrad.addColorStop(1, color);
-      ctx.fillStyle = charGrad;
-      ctx.fillText(char, charMidX, y);
+  return new Promise((resolve) => {
+    const charNames = ['0', '1', '2', '3', 'space', '4', '5', '6', '7', '8', '9'];
+    const charScales = [1.0, 0.74, 0.72, 0.92, 0.25, 1.05, 0.60, 0.68, 0.63, 0.70, 0.66];
+    
+    const images = [];
+    let loadedCount = 0;
+    const totalToLoad = 10; // Exclude space
+    
+    const onLoadImage = () => {
+      loadedCount++;
+      if (loadedCount === totalToLoad) {
+        drawAll();
+      }
+    };
+    
+    for (let i = 0; i < charNames.length; i++) {
+      if (charNames[i] === 'space') {
+        images.push(null);
+      } else {
+        const img = new Image();
+        img.src = `logo_char_${charNames[i]}.png`;
+        img.onload = onLoadImage;
+        img.onerror = onLoadImage;
+        images.push(img);
+      }
     }
-
-    currentX += charW;
-  }
-
-  ctx.restore();
+    
+    function drawAll() {
+      const baseSize = stripWidth * 0.11; // base scale size for title
+      let totalW = 0;
+      const widths = [];
+      const heights = [];
+      
+      for (let i = 0; i < charNames.length; i++) {
+        if (charNames[i] === 'space') {
+          const w = baseSize * 0.25;
+          widths.push(w);
+          heights.push(0);
+          totalW += w;
+        } else {
+          const img = images[i];
+          if (img && img.naturalWidth) {
+            const h = baseSize * charScales[i];
+            const aspect = img.naturalWidth / img.naturalHeight || 1;
+            const w = h * aspect;
+            widths.push(w);
+            heights.push(h);
+            totalW += w;
+          } else {
+            widths.push(0);
+            heights.push(0);
+          }
+        }
+      }
+      
+      let currentX = stripX + (stripWidth - totalW) / 2;
+      const baselineY = stripY + (stripHeight * 0.052); // Baseline aligned
+      
+      for (let i = 0; i < charNames.length; i++) {
+        if (charNames[i] === 'space') {
+          currentX += widths[i];
+        } else {
+          const img = images[i];
+          const w = widths[i];
+          const h = heights[i];
+          if (img && img.naturalWidth) {
+            ctx.drawImage(img, currentX, baselineY - h, w, h);
+            currentX += w;
+          }
+        }
+      }
+      resolve();
+    }
+  });
 }
 
 // Window load init

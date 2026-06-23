@@ -248,34 +248,34 @@ body {
 .title-container {
   display: inline-flex;
   justify-content: center;
-  align-items: center;
-  padding: 5px 0;
+  align-items: flex-end;
+  padding: 10px 0;
 }
 
 .cute-title {
-  font-family: 'Genty', 'Jua', 'Gaegu', sans-serif;
-  font-size: 3.8rem;
-  font-weight: normal;
   display: inline-flex;
   justify-content: center;
-  align-items: center;
-  gap: 2.5px;
-  letter-spacing: 1px;
+  align-items: flex-end;
+  gap: 3px;
   user-select: none;
 }
 
-.cute-title span {
+.logo-char {
   display: inline-block;
-  -webkit-text-stroke: 2.2px #111111;
-  background: linear-gradient(135deg, #ffffff 0%, #ffffff 18%, var(--char-color) 38%, var(--char-color) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(3.5px 3.5px 0px #111111);
+  vertical-align: bottom;
   animation: float-char 1.8s ease-in-out infinite alternate;
 }
 
+.logo-char img {
+  height: calc(clamp(60px, 12vh, 100px) * var(--char-scale, 1));
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.1));
+}
+
 .cute-title .space {
-  width: 15px;
+  width: clamp(8px, 2vh, 16px);
 }
 
 @keyframes float-char {
