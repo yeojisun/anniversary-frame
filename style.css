@@ -245,24 +245,42 @@ body {
   margin-bottom: 25px;
 }
 
-.logo-wrapper {
-  display: flex;
+.title-container {
+  display: inline-flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 5px;
+  padding: 5px 0;
 }
 
-.app-logo-img {
-  height: clamp(65px, 13vh, 105px);
-  width: auto;
-  object-fit: contain;
-  filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.15));
-  animation: float-logo 3.5s ease-in-out infinite alternate;
+.cute-title {
+  font-family: 'Genty', 'Jua', 'Gaegu', sans-serif;
+  font-size: 3.8rem;
+  font-weight: normal;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5px;
+  letter-spacing: 1px;
+  user-select: none;
 }
 
-@keyframes float-logo {
-  0% { transform: translateY(0) rotate(-1.2deg); }
-  100% { transform: translateY(-8px) rotate(1.2deg); }
+.cute-title span {
+  display: inline-block;
+  -webkit-text-stroke: 2.2px #111111;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 18%, var(--char-color) 38%, var(--char-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(3.5px 3.5px 0px #111111);
+  animation: float-char 1.8s ease-in-out infinite alternate;
+}
+
+.cute-title .space {
+  width: 15px;
+}
+
+@keyframes float-char {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-12px) scale(1.03); }
 }
 
 .subtitle {
