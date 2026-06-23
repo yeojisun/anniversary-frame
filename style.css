@@ -267,7 +267,7 @@ body {
 }
 
 .logo-char img {
-  height: calc(clamp(44px, 9vh, 72px) * var(--char-scale, 1));
+  height: calc(clamp(32px, 7.5vh, 56px) * var(--char-scale, 1));
   width: auto;
   object-fit: contain;
   display: block;
