@@ -1174,7 +1174,7 @@ async function drawStickers(ctx, sandboxX, sandboxY, sandboxW, sandboxH) {
 function drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight) {
   return new Promise((resolve) => {
     const charNames = ['0', '1', '2', '3', 'space', '4', '5', '6', '7', '8', '9'];
-    const charScales = [1.0, 0.74, 0.72, 0.92, 0.25, 1.05, 0.60, 0.68, 0.63, 0.70, 0.66];
+    const charScales = [1.0, 0.77, 0.77, 0.97, 0.25, 1.05, 0.77, 0.76, 0.77, 0.77, 0.77];
     
     const images = [];
     let loadedCount = 0;
