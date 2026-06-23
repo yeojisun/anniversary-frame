@@ -245,39 +245,24 @@ body {
   margin-bottom: 25px;
 }
 
-.title-container {
-  display: inline-flex;
+.logo-wrapper {
+  display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5px 0;
+  margin-bottom: 5px;
 }
 
-/* Cute rounded flat title style (removing specular ballon gradient/filter) */
-.cute-title {
-  font-family: 'Genty', 'Jua', 'Gaegu', sans-serif;
-  font-size: 3.5rem;
-  font-weight: normal;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5px;
-  text-shadow: 2.5px 2.5px 0px #111111; /* Sharp flat black shadow */
-  letter-spacing: 1.5px;
-  user-select: none;
-  animation: float-title 3.5s ease-in-out infinite alternate;
+.app-logo-img {
+  height: clamp(65px, 13vh, 105px);
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.15));
+  animation: float-logo 3.5s ease-in-out infinite alternate;
 }
 
-.cute-title span {
-  display: inline-block;
-}
-
-.cute-title .space {
-  width: 15px;
-}
-
-@keyframes float-title {
-  0% { transform: translateY(0) rotate(-1deg); }
-  100% { transform: translateY(-7px) rotate(1deg); }
+@keyframes float-logo {
+  0% { transform: translateY(0) rotate(-1.2deg); }
+  100% { transform: translateY(-8px) rotate(1.2deg); }
 }
 
 .subtitle {
@@ -592,8 +577,19 @@ body {
   color: #6b7280;
   gap: 4px;
 }
-.slot-icon {
-  font-size: 1.8rem;
+.slot-placeholder-img {
+  width: clamp(36px, 9vh, 64px);
+  height: clamp(36px, 9vh, 64px);
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  margin-bottom: 5px;
+  animation: wiggle-placeholder 4s ease-in-out infinite alternate;
+}
+
+@keyframes wiggle-placeholder {
+  0% { transform: rotate(-2deg); }
+  100% { transform: rotate(2deg); }
 }
 .slot-text {
   font-family: 'Share Tech Mono', monospace;
@@ -1304,8 +1300,9 @@ body {
     height: 48vh;
     max-height: 380px;
   }
-  .slot-icon {
-    font-size: 1.1rem;
+  .slot-placeholder-img {
+    width: clamp(26px, 7vh, 42px);
+    height: clamp(26px, 7vh, 42px);
   }
   .slot-text {
     font-size: 0.7rem;

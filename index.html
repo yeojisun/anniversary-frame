@@ -40,39 +40,8 @@
   <main class="app-container">
     <!-- Cute Flat Typography Title Header -->
     <header class="app-header">
-      <div class="win-logo-container">
-        <!-- Pixelated wavy Windows 95/98 Logo -->
-        <svg class="win-retro-logo" viewBox="0 0 100 80" width="80" height="64">
-          <!-- Shadow / trailing black pixels -->
-          <path d="M12 24h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm24-20h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4zm4 4h4v4h-4z" fill="#000000" />
-          <!-- Red segment (top left) -->
-          <path d="M16 12h16v4H16zm4 4h16v4H20zm4 4h16v4H24zm4 4h16v4H28z" fill="#ff4d4d" stroke="#000000" stroke-width="2.5" />
-          <!-- Green segment (top right) -->
-          <path d="M38 10h16v4H38zm4 4h16v4H42zm4 4h16v4H46zm4 4h16v4H50z" fill="#4dff4d" stroke="#000000" stroke-width="2.5" />
-          <!-- Blue segment (bottom left) -->
-          <path d="M12 30h16v4H12zm4 4h16v4H16zm4 4h16v4H20zm4 4h16v4H24z" fill="#3385ff" stroke="#000000" stroke-width="2.5" />
-          <!-- Yellow segment (bottom right) -->
-          <path d="M34 28h16v4H34zm4 4h16v4H38zm4 4h16v4H42zm4 4h16v4H46z" fill="#ffcc00" stroke="#000000" stroke-width="2.5" />
-          <!-- Wind trail dashes -->
-          <rect x="68" y="16" width="12" height="4" fill="#000000" />
-          <rect x="76" y="24" width="8" height="4" fill="#000000" />
-          <rect x="72" y="32" width="12" height="4" fill="#000000" />
-        </svg>
-      </div>
-      <div class="title-container">
-        <h1 class="cute-title" id="cuteTitle">
-          <span style="color: #ff70a6;">4</span>
-          <span style="color: #ff9770;">c</span>
-          <span style="color: #ffd670;">u</span>
-          <span style="color: #e9ff70;">t</span>
-          <span class="space">&nbsp;</span>
-          <span style="color: #70e8ff;">C</span>
-          <span style="color: #a78bfa;">a</span>
-          <span style="color: #f472b6;">m</span>
-          <span style="color: #fb7185;">e</span>
-          <span style="color: #38bdf8;">r</span>
-          <span style="color: #34d399;">a</span>
-        </h1>
+      <div class="logo-wrapper">
+        <img src="y2k_4cut_camera_logo.png" alt="4cut Camera" class="app-logo-img">
       </div>
       <p class="subtitle">Record your now</p>
     </header>
@@ -161,7 +130,7 @@
                 <!-- Slot 1 -->
                 <div class="photo-slot" data-slot="0" id="slot0">
                   <div class="slot-placeholder">
-                    <span class="slot-icon">📸</span>
+                    <img src="minji_main.png" class="slot-placeholder-img" alt="Minji placeholder">
                     <span class="slot-text">cut 01</span>
                   </div>
                   <video class="video-preview hidden" autoplay playsinline muted></video>
@@ -171,7 +140,7 @@
                 <!-- Slot 2 -->
                 <div class="photo-slot" data-slot="1" id="slot1">
                   <div class="slot-placeholder">
-                    <span class="slot-icon">📸</span>
+                    <img src="minji_main.png" class="slot-placeholder-img" alt="Minji placeholder">
                     <span class="slot-text">cut 02</span>
                   </div>
                   <video class="video-preview hidden" autoplay playsinline muted></video>
@@ -181,7 +150,7 @@
                 <!-- Slot 3 -->
                 <div class="photo-slot" data-slot="2" id="slot2">
                   <div class="slot-placeholder">
-                    <span class="slot-icon">📸</span>
+                    <img src="minji_main.png" class="slot-placeholder-img" alt="Minji placeholder">
                     <span class="slot-text">cut 03</span>
                   </div>
                   <video class="video-preview hidden" autoplay playsinline muted></video>
@@ -191,7 +160,7 @@
                 <!-- Slot 4 -->
                 <div class="photo-slot" data-slot="3" id="slot3">
                   <div class="slot-placeholder">
-                    <span class="slot-icon">📸</span>
+                    <img src="minji_main.png" class="slot-placeholder-img" alt="Minji placeholder">
                     <span class="slot-text">cut 04</span>
                   </div>
                   <video class="video-preview hidden" autoplay playsinline muted></video>
@@ -289,6 +258,9 @@
             <button class="sticker-item" data-sticker="🎸">🎸</button>
             <button class="sticker-item" data-sticker="💾">💾</button>
             <button class="sticker-item" data-sticker="👾">👾</button>
+            <button class="sticker-item img-sticker" data-sticker="minji_main.png" title="민지">
+              <img src="minji_main.png" style="width: 28px; height: 28px; object-fit: contain; pointer-events: none;">
+            </button>
             <button class="sticker-item img-sticker" data-sticker="minji_dizzy.png" title="민지 기절">
               <img src="minji_dizzy.png" style="width: 28px; height: 28px; object-fit: contain; pointer-events: none;">
             </button>

@@ -283,6 +283,11 @@ function clearSlot(index) {
   img.classList.add('hidden');
   retakeBtn.classList.add('hidden');
   placeholder.classList.remove('hidden');
+
+  const placeholderImg = placeholder.querySelector('.slot-placeholder-img');
+  if (placeholderImg) {
+    placeholderImg.src = 'minji_main.png';
+  }
   
   if (state.inputMode === 'camera' && state.activeSlotIndex === index && state.cameraStream) {
     video.classList.remove('hidden');
@@ -356,6 +361,12 @@ async function startCameraStream() {
     console.error(err);
     video.classList.add('hidden');
     placeholder.classList.remove('hidden');
+    
+    const placeholderImg = placeholder.querySelector('.slot-placeholder-img');
+    if (placeholderImg) {
+      placeholderImg.src = 'minji_dizzy.png';
+    }
+
     alert('카메라에 연결할 수 없습니다. 권한 설정을 확인하시거나 사진 업로드 모드를 이용해주세요!');
     setInputMode('upload');
   }
@@ -825,24 +836,13 @@ async function downloadComposite() {
   ctx.fillStyle = titleGrad;
   ctx.fillRect(10, 10, canvasWidth - 20, titleBarH);
 
-  // Draw wavy pixel Windows flag logo
+  // Title text with emoji instead of Windows logo
   const logoX = 24;
-  const logoY = 10 + (titleBarH - 40) / 2;
-  ctx.fillStyle = '#ff4d4d';
-  ctx.fillRect(logoX, logoY, 14, 12);
-  ctx.fillStyle = '#4dff4d';
-  ctx.fillRect(logoX + 16, logoY - 2, 14, 12);
-  ctx.fillStyle = '#3385ff';
-  ctx.fillRect(logoX - 2, logoY + 14, 14, 12);
-  ctx.fillStyle = '#ffcc00';
-  ctx.fillRect(logoX + 14, logoY + 12, 14, 12);
-
-  // Title text
   ctx.font = 'bold 36px sans-serif';
   ctx.fillStyle = '#ffffff';
   ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
-  ctx.fillText("Graphics editor", logoX + 44, 10 + titleBarH / 2);
+  ctx.fillText("🎨 Graphics editor", logoX, 10 + titleBarH / 2);
 
   // Control buttons on titlebar
   const btnSize = 34;
@@ -1047,7 +1047,7 @@ async function downloadComposite() {
   }
 
   // Draw Cute Character Title at the top of the photo strip
-  drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight);
+  await drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight);
 
   // Draw Date at the bottom of the photo strip
   const dateY = stripY + stripHeight - (footerHeight / 2);
@@ -1172,51 +1172,19 @@ async function drawStickers(ctx, sandboxX, sandboxY, sandboxW, sandboxH) {
 }
 
 function drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight) {
-  const text = "4cut Camera";
-  const colors = [
-    "#ff70a6", "#ff9770", "#ffd670", "#e9ff70", " ", 
-    "#70e8ff", "#a78bfa", "#f472b6", "#fb7185", "#38bdf8", 
-    "#34d399"
-  ];
-
-  ctx.save();
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  
-  const fontSize = stripWidth * 0.082;
-  ctx.font = `bold ${fontSize}px 'Genty', 'Jua', 'Gaegu', sans-serif`;
-  
-  let totalWidth = 0;
-  const charWidths = [];
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    const width = char === " " ? fontSize * 0.25 : ctx.measureText(char).width;
-    charWidths.push(width);
-    totalWidth += width;
-  }
-
-  let currentX = stripX + (stripWidth - totalWidth) / 2;
-  const y = stripY + (stripHeight * 0.034);
-
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    const charW = charWidths[i];
-    const color = colors[i];
-
-    if (char !== " ") {
-      // Flat solid shadow
-      ctx.fillStyle = "#111111";
-      ctx.fillText(char, currentX + charW / 2 + 5, y + 5);
-
-      // Cute color fill
-      ctx.fillStyle = color;
-      ctx.fillText(char, currentX + charW / 2, y);
-    }
-
-    currentX += charW;
-  }
-
-  ctx.restore();
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = 'y2k_4cut_camera_logo.png';
+    img.onload = () => {
+      const logoW = stripWidth * 0.48;
+      const logoH = logoW * (img.height / img.width || 1);
+      const x = stripX + (stripWidth - logoW) / 2;
+      const y = stripY + (stripHeight * 0.038) - (logoH / 2);
+      ctx.drawImage(img, x, y, logoW, logoH);
+      resolve();
+    };
+    img.onerror = () => resolve();
+  });
 }
 
 // Window load init
