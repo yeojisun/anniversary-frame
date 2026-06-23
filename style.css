@@ -595,13 +595,12 @@ body {
   color: #6b7280;
   gap: 4px;
 }
-.slot-placeholder-img {
-  width: clamp(36px, 9vh, 64px);
-  height: clamp(36px, 9vh, 64px);
-  object-fit: contain;
+.slot-icon {
+  font-size: 1.8rem;
+  margin-bottom: 4px;
+  display: inline-block;
   pointer-events: none;
   user-select: none;
-  margin-bottom: 5px;
   animation: wiggle-placeholder 4s ease-in-out infinite alternate;
 }
 
@@ -1318,9 +1317,8 @@ body {
     height: 48vh;
     max-height: 380px;
   }
-  .slot-placeholder-img {
-    width: clamp(26px, 7vh, 42px);
-    height: clamp(26px, 7vh, 42px);
+  .slot-icon {
+    font-size: 1.1rem;
   }
   .slot-text {
     font-size: 0.7rem;

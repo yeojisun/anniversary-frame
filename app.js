@@ -283,11 +283,6 @@ function clearSlot(index) {
   img.classList.add('hidden');
   retakeBtn.classList.add('hidden');
   placeholder.classList.remove('hidden');
-
-  const placeholderImg = placeholder.querySelector('.slot-placeholder-img');
-  if (placeholderImg) {
-    placeholderImg.src = 'minji_main.png';
-  }
   
   if (state.inputMode === 'camera' && state.activeSlotIndex === index && state.cameraStream) {
     video.classList.remove('hidden');
@@ -361,11 +356,6 @@ async function startCameraStream() {
     console.error(err);
     video.classList.add('hidden');
     placeholder.classList.remove('hidden');
-    
-    const placeholderImg = placeholder.querySelector('.slot-placeholder-img');
-    if (placeholderImg) {
-      placeholderImg.src = 'minji_dizzy.png';
-    }
 
     alert('카메라에 연결할 수 없습니다. 권한 설정을 확인하시거나 사진 업로드 모드를 이용해주세요!');
     setInputMode('upload');
