@@ -467,6 +467,9 @@ function capturePhoto() {
   video.classList.add('hidden');
   retakeBtn.classList.remove('hidden');
 
+  // Remove slot highlight after capture
+  slots.forEach(slot => slot.classList.remove('active-capture'));
+
   const nextEmptyIndex = state.layoutMode === 'four-cut'
     ? state.capturedImages.findIndex((img, idx) => img === null)
     : -1;
@@ -476,7 +479,10 @@ function capturePhoto() {
     btnStartCamera.classList.remove('hidden');
     btnTriggerCapture.classList.add('hidden');
   } else {
-    selectSlot(nextEmptyIndex, true);
+    // Keep camera stream warm, but do not auto-progress to the next slot.
+    // The user will click the next slot manually.
+    btnStartCamera.classList.add('hidden');
+    btnTriggerCapture.classList.add('hidden');
   }
 }
 
