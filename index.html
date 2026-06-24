@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Jua&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1.5">
+  <link rel="stylesheet" href="style.css?v=1.9">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -80,6 +80,34 @@
       <section class="photo-workspace-section">
         <!-- Frame Layout Wrapper (responsive height-based container) -->
         <div id="photoFrameContainer" class="frame-container format-four-cut frame-style-cyber-chrome">
+          <!-- Soribada Header -->
+          <div class="sori-player-widget sori-header">
+            <div class="sori-top-bar">
+              <div class="sori-glowing-bar"></div>
+              <div class="sori-capsule">
+                <button class="sori-btn-arrow btn-left">◀</button>
+                <div class="sori-title-group">
+                  <div class="sori-main-title">파 도</div>
+                  <div class="sori-sub-title">Player for Soribada</div>
+                </div>
+                <button class="sori-btn-arrow btn-right">▶</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Soribada Metadata Screen -->
+          <div class="sori-player-widget sori-metadata">
+            <div class="sori-meta-row">
+              <span class="sori-meta-btn">Mode</span>
+              <span class="sori-timer">00:28.23</span>
+              <span class="sori-meta-btn">Spect.</span>
+            </div>
+            <div class="sori-track-info">
+              <div class="sori-track-line1">1. 1-02시~1.MP3</div>
+              <div class="sori-track-line2">[MP3]-[128K]-[Stereo]-[27:32]</div>
+            </div>
+          </div>
+
           <!-- Windows Title Bar -->
           <div class="win-title-bar">
             <span class="win-title-text"><span class="win-title-icon">🎨</span> Graphics editor</span>
@@ -207,6 +235,33 @@
           <div class="win-status-bar">
             <span class="status-message">For Help, click Help Topics on the Help Menu</span>
             <span class="status-date" id="currentDateStr">2026.06.01</span>
+          </div>
+
+          <!-- Soribada Footer -->
+          <div class="sori-player-widget sori-footer">
+            <div class="sori-controls-row">
+              <div class="sori-playback-btns">
+                <button class="sori-ctrl-btn sori-btn-circle">⏮</button>
+                <button class="sori-ctrl-btn sori-btn-circle">⏹</button>
+                <button class="sori-ctrl-btn sori-btn-circle">⏯</button>
+                <button class="sori-ctrl-btn sori-btn-circle">⏭</button>
+              </div>
+              <div class="sori-progress-bar">
+                <div class="sori-progress-track">
+                  <div class="sori-progress-knob"></div>
+                </div>
+              </div>
+              <div class="sori-action-btns">
+                <button class="sori-ctrl-btn sori-btn-circle">📊</button>
+                <button class="sori-ctrl-btn sori-btn-circle">☰</button>
+                <button class="sori-ctrl-btn sori-btn-circle">🔊</button>
+                <button class="sori-ctrl-btn sori-btn-circle">⚙️</button>
+              </div>
+            </div>
+            <div class="sori-bottom-bar">
+              <div class="sori-logo-badge">Sorinara</div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -268,6 +323,9 @@
             <button class="theme-card" data-theme="aero-glass" style="background: linear-gradient(135deg, rgba(6,182,212,0.3), rgba(236,72,153,0.3)); border: 1.5px solid #06b6d4;">
               <span class="theme-name">에어로 글래스</span>
             </button>
+            <button class="theme-card" data-theme="sori-player" style="background: linear-gradient(135deg, #a3b8e5, #5185e6, #153b92); border: 1.5px solid #a3b8e5;">
+              <span class="theme-name">소리나라 MP3</span>
+            </button>
           </div>
         </div>
 
@@ -311,6 +369,6 @@
   <!-- Hidden Canvas for Composite rendering -->
   <canvas id="compositeCanvas" style="display: none;"></canvas>
 
-  <script src="app.js?v=1.5"></script>
+  <script src="app.js?v=1.9"></script>
 </body>
 </html>

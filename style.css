@@ -981,6 +981,325 @@ body {
   border: 1.5px solid rgba(255, 255, 255, 0.5);
 }
 
+/* Hide Soribada widgets by default */
+.sori-player-widget {
+  display: none !important;
+}
+
+/* 6. Soribada MP3 Player (Y2K Retro Player Skin) */
+.frame-style-sori-player {
+  background: linear-gradient(135deg, #dedede 0%, #cbd5e1 30%, #94a3b8 50%, #cbd5e1 70%, #dedede 100%);
+  border: 7px solid #e2e8f0 !important;
+  border-top-color: #f8fafc !important;
+  border-left-color: #f8fafc !important;
+  border-right-color: #64748b !important;
+  border-bottom-color: #64748b !important;
+  border-radius: 28px;
+  box-shadow: 
+    6px 6px 16px rgba(0, 0, 0, 0.35),
+    inset 2px 2px 4px #ffffff,
+    inset -2px -2px 4px #475569;
+  padding: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Activate Soribada layout elements and hide Windows 95 panels */
+.frame-style-sori-player .sori-player-widget {
+  display: block !important;
+}
+.frame-style-sori-player .win-title-bar,
+.frame-style-sori-player .win-menu-bar,
+.frame-style-sori-player .win-sidebar,
+.frame-style-sori-player .win-status-bar {
+  display: none !important;
+}
+
+.frame-style-sori-player .win-body-wrapper {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.frame-style-sori-player .win-canvas-area {
+  background: linear-gradient(180deg, #102a6b 0%, #081232 100%) !important;
+  border: 4px solid #475569 !important;
+  border-top-color: #1e293b !important;
+  border-left-color: #1e293b !important;
+  border-right-color: #94a3b8 !important;
+  border-bottom-color: #94a3b8 !important;
+  border-radius: 12px;
+  padding: 12px;
+  margin: 8px 6px;
+  position: relative;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+}
+
+/* Custom Header Capsule styling */
+.frame-style-sori-player .sori-header {
+  margin: 4px 6px;
+}
+.frame-style-sori-player .sori-top-bar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  background: linear-gradient(180deg, #e2e8f0 0%, #94a3b8 100%);
+  border: 2px solid #64748b;
+  border-radius: 16px;
+  padding: 0 10px;
+  box-shadow: 
+    inset 1px 1px 1px #fff,
+    2px 2px 4px rgba(0,0,0,0.15);
+}
+.frame-style-sori-player .sori-glowing-bar {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  right: 12px;
+  height: 8px;
+  background: linear-gradient(90deg, rgba(6,182,212,0.1), #00ffff, #00ffff, rgba(6,182,212,0.1));
+  border-radius: 4px;
+  box-shadow: 0 0 8px #00ffff;
+  border: 1px solid rgba(255,255,255,0.4);
+}
+.frame-style-sori-player .sori-capsule {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+  border: 2px solid #475569;
+  border-radius: 20px;
+  padding: 3px 12px;
+  box-shadow: 
+    inset 1px 1px 1px #fff,
+    0 2px 3px rgba(0,0,0,0.1);
+  z-index: 2;
+}
+.frame-style-sori-player .sori-btn-arrow {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid #475569;
+  background: radial-gradient(circle, #60a5fa 0%, #2563eb 100%);
+  color: #ffffff;
+  font-size: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: inset 1px 1px 1px #fff;
+  padding: 0;
+}
+.frame-style-sori-player .sori-title-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+.frame-style-sori-player .sori-main-title {
+  font-family: 'Jua', 'Noto Sans KR', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #0b1d4f;
+  letter-spacing: 2px;
+  text-shadow: 1px 1px 0px #ffffff;
+}
+.frame-style-sori-player .sori-sub-title {
+  font-size: 0.52rem;
+  font-family: 'Share Tech Mono', sans-serif;
+  color: #d97706; /* Golden gold */
+  font-weight: bold;
+  letter-spacing: 0.3px;
+}
+
+/* Custom Metadata Display panel */
+.frame-style-sori-player .sori-metadata {
+  background-color: #050c24;
+  border: 2px solid #64748b;
+  border-radius: 8px;
+  margin: 0 6px 4px 6px;
+  padding: 6px 12px;
+  font-family: 'Share Tech Mono', monospace;
+  color: #ffffff;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.8);
+}
+.frame-style-sori-player .sori-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.frame-style-sori-player .sori-meta-btn {
+  font-size: 0.6rem;
+  background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+  border: 1px solid #1e3a8a;
+  color: #ffffff;
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-weight: bold;
+  box-shadow: inset 1px 1px 1px rgba(255,255,255,0.4);
+}
+.frame-style-sori-player .sori-timer {
+  font-size: 1.15rem;
+  color: #ffffff;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 4px rgba(255,255,255,0.6);
+}
+.frame-style-sori-player .sori-track-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.65rem;
+  color: #e2e8f0;
+  border-top: 1px solid #1e293b;
+  margin-top: 4px;
+  padding-top: 4px;
+}
+.frame-style-sori-player .sori-track-line1 {
+  color: #facc15; /* Yellow track text */
+  font-weight: bold;
+}
+.frame-style-sori-player .sori-track-line2 {
+  color: #38bdf8; /* Cyan tech info */
+}
+
+/* Wavy cyan visualizer styling for slots */
+.frame-style-sori-player .slots-grid {
+  background: linear-gradient(180deg, #00ffff 0%, #00a8cc 100%) !important;
+  border: 3px solid #cbd5e1 !important;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.5) !important;
+  position: relative;
+}
+.frame-style-sori-player .slots-grid::before {
+  content: '';
+  position: absolute;
+  top: 45%; left: 0; right: 0; height: 10%;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.9) 0%, transparent 70%);
+  filter: blur(1px);
+  pointer-events: none;
+  animation: sori-wave 0.15s infinite alternate;
+  z-index: 1;
+}
+@keyframes sori-wave {
+  0% { transform: scaleY(0.7); opacity: 0.7; }
+  100% { transform: scaleY(1.4); opacity: 1; }
+}
+
+.frame-style-sori-player .photo-slot {
+  background-color: rgba(11, 29, 79, 0.95);
+  border: 1.5px solid #3b82f6 !important;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+.frame-style-sori-player .slot-placeholder {
+  color: #facc15;
+}
+.frame-style-sori-player .slot-text {
+  color: #facc15;
+  font-family: 'Share Tech Mono', monospace;
+  text-shadow: 0 0 3px rgba(250, 204, 21, 0.5);
+}
+
+.frame-style-sori-player .frame-decor-star {
+  color: #facc15;
+}
+
+/* Custom Footer and Playback Controls */
+.frame-style-sori-player .sori-footer {
+  background: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%);
+  border-top: 2px solid #64748b;
+  border-radius: 0 0 20px 20px;
+  padding: 8px 12px;
+  box-shadow: inset 0 1px 0 #fff;
+}
+.frame-style-sori-player .sori-controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.frame-style-sori-player .sori-playback-btns, 
+.frame-style-sori-player .sori-action-btns {
+  display: flex;
+  gap: 4px;
+}
+.frame-style-sori-player .sori-btn-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid #475569;
+  background: radial-gradient(circle, #f8fafc 0%, #cbd5e1 100%);
+  color: #0f172a;
+  font-size: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 
+    inset 1px 1px 1px #fff,
+    1px 1.5px 2px rgba(0,0,0,0.2);
+  padding: 0;
+}
+.frame-style-sori-player .sori-btn-circle:active {
+  background: #cbd5e1;
+}
+.frame-style-sori-player .sori-progress-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.frame-style-sori-player .sori-progress-track {
+  width: 100%;
+  height: 4px;
+  background: #334155;
+  border-radius: 2px;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+}
+.frame-style-sori-player .sori-progress-knob {
+  position: absolute;
+  top: -4px;
+  left: 28%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0%, #cbd5e1 100%);
+  border: 1.5px solid #475569;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  cursor: pointer;
+}
+.frame-style-sori-player .sori-bottom-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-top: 1px solid #cbd5e1;
+  margin-top: 6px;
+  padding-top: 6px;
+}
+.frame-style-sori-player .sori-logo-badge {
+  background: linear-gradient(90deg, #0284c7 0%, #06b6d4 100%);
+  border: 1.5px solid #00f0ff;
+  border-radius: 12px;
+  color: #ffffff;
+  padding: 2px 10px;
+  font-family: 'Share Tech Mono', 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 0.65rem;
+  box-shadow: 
+    inset 1px 1px 1px rgba(255,255,255,0.4),
+    0 0 6px rgba(6,182,212,0.45);
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
 /* ==========================================
    TOOLBOX SECTION (CLEAN FLAT Y2K)
    ========================================== */

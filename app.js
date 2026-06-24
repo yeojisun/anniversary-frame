@@ -18,6 +18,15 @@ const state = {
   devices: []
 };
 
+const themeTitles = {
+  'cyber-chrome': { text: 'Graphics editor', icon: '🎨' },
+  'retro-tokki': { text: 'Tokki World', icon: '🐰' },
+  'grunge-star': { text: 'Grunge Booth', icon: '🎸' },
+  'classic-polaroid': { text: 'Polaroid Camera', icon: '📷' },
+  'aero-glass': { text: 'Glass Studio', icon: '✨' },
+  'sori-player': { text: '파도 Player for Soribada', icon: '🎵' }
+};
+
 // --- DOM SELECTORS ---
 const photoFrameContainer = document.getElementById('photoFrameContainer');
 const slotsGrid = document.getElementById('slotsGrid');
@@ -267,6 +276,12 @@ function setLayoutMode(mode) {
 function setTheme(theme) {
   photoFrameContainer.className = `frame-container format-${state.layoutMode === 'four-cut' ? 'four-cut' : 'single-cut'} frame-style-${theme}`;
   state.theme = theme;
+
+  const titleTextEl = photoFrameContainer.querySelector('.win-title-text');
+  if (titleTextEl) {
+    const titleInfo = themeTitles[theme] || themeTitles['cyber-chrome'];
+    titleTextEl.innerHTML = `<span class="win-title-icon">${titleInfo.icon}</span> ${titleInfo.text}`;
+  }
 }
 
 function clearSlot(index) {
@@ -768,6 +783,17 @@ async function downloadComposite() {
   compositeCanvas.height = canvasHeight;
   const ctx = compositeCanvas.getContext('2d');
 
+  // If theme is Soribada Player, bypass standard Windows 95 editor rendering
+  if (state.theme === 'sori-player') {
+    await drawSoriPlayerComposite(ctx, canvasWidth, canvasHeight, isFourCut);
+    const dataUrl = compositeCanvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.download = `our_4th_anniversary_${isFourCut ? '4cut' : 'single'}.png`;
+    link.href = dataUrl;
+    link.click();
+    return;
+  }
+
   // Load theme variables
   let winBg = '#d4d0c8';
   let titleGradStart = '#db2777';
@@ -811,6 +837,15 @@ async function downloadComposite() {
     workspaceBg = '#f0f9ff';
     slotsBg = '#ffffff';
     slotsBorder = '#111111';
+  } else if (state.theme === 'sori-player') {
+    winBg = '#b8c6e2';
+    titleGradStart = '#153b92';
+    titleGradEnd = '#5185e6';
+    workspaceBg = '#0d2054';
+    slotsBg = '#102a6b';
+    slotsBorder = '#3b82f6';
+    dateColor = '#facc15';
+    isDarkTheme = true;
   }
 
   // 1. Draw outer window frame
@@ -830,7 +865,8 @@ async function downloadComposite() {
   ctx.fillStyle = '#ffffff';
   ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
-  ctx.fillText("🎨 Graphics editor", logoX, 10 + titleBarH / 2);
+  const titleInfo = themeTitles[state.theme] || themeTitles['cyber-chrome'];
+  ctx.fillText(`${titleInfo.icon} ${titleInfo.text}`, logoX, 10 + titleBarH / 2);
 
   // Control buttons on titlebar
   const btnSize = 34;
@@ -1022,11 +1058,19 @@ async function downloadComposite() {
     if (imgData) {
       await drawImageCropped(ctx, imgData, x, y, slotWidth, slotHeight);
     } else {
-      ctx.fillStyle = isDarkTheme ? '#a1a1aa' : '#9ca3af';
-      ctx.font = `bold ${slotHeight * 0.12}px 'Share Tech Mono', sans-serif`;
+      let placeholderText = `cut 0${i + 1} ✦`;
+      let fontSizeFactor = 0.12;
+      if (state.theme === 'sori-player') {
+        placeholderText = "click! 📸";
+        ctx.fillStyle = '#facc15';
+        fontSizeFactor = 0.1;
+      } else {
+        ctx.fillStyle = isDarkTheme ? '#a1a1aa' : '#9ca3af';
+      }
+      ctx.font = `bold ${slotHeight * fontSizeFactor}px 'Share Tech Mono', sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(`cut 0${i + 1} ✦`, x + slotWidth / 2, y + slotHeight / 2);
+      ctx.fillText(placeholderText, x + slotWidth / 2, y + slotHeight / 2);
     }
 
     ctx.strokeStyle = slotsBorder;
@@ -1034,8 +1078,6 @@ async function downloadComposite() {
     ctx.strokeRect(x, y, slotWidth, slotHeight);
   }
 
-  // Draw Cute Character Title at the top of the photo strip
-  await drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight);
 
   // Draw Date at the bottom of the photo strip
   const dateY = stripY + stripHeight - (footerHeight / 2);
@@ -1279,6 +1321,326 @@ function drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight) {
       resolve();
     }
   });
+}
+
+function drawRoundedRect(ctx, x, y, width, height, radius, fillStyle, strokeStyle, strokeWidth) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+  if (fillStyle) {
+    ctx.fillStyle = fillStyle;
+    ctx.fill();
+  }
+  if (strokeStyle && strokeWidth) {
+    ctx.strokeStyle = strokeStyle;
+    ctx.lineWidth = strokeWidth;
+    ctx.stroke();
+  }
+}
+
+async function drawSoriPlayerComposite(ctx, canvasWidth, canvasHeight, isFourCut) {
+  // 1. Draw outer brushed metal player body
+  const bodyGrad = ctx.createLinearGradient(0, 0, canvasWidth, canvasHeight);
+  bodyGrad.addColorStop(0, '#f8fafc');
+  bodyGrad.addColorStop(0.3, '#cbd5e1');
+  bodyGrad.addColorStop(0.5, '#94a3b8');
+  bodyGrad.addColorStop(0.7, '#cbd5e1');
+  bodyGrad.addColorStop(1, '#64748b');
+
+  drawRoundedRect(ctx, 10, 10, canvasWidth - 20, canvasHeight - 20, 60, bodyGrad, '#475569', 8);
+
+  // 2. Draw Top Capsule Header
+  const headerY = 36;
+  const headerH = 110;
+  // Outer glowing bar
+  const glowGrad = ctx.createLinearGradient(40, headerY + 15, canvasWidth - 40, headerY + 15);
+  glowGrad.addColorStop(0, 'rgba(6,182,212,0.1)');
+  glowGrad.addColorStop(0.5, '#00ffff');
+  glowGrad.addColorStop(1, 'rgba(6,182,212,0.1)');
+  drawRoundedRect(ctx, 40, headerY + 15, canvasWidth - 80, 20, 10, glowGrad, '#ffffff', 2);
+
+  // Center Capsule shape
+  const capW = 540;
+  const capH = 85;
+  const capX = (canvasWidth - capW) / 2;
+  const capY = headerY + 5;
+  const capGrad = ctx.createLinearGradient(capX, capY, capX, capY + capH);
+  capGrad.addColorStop(0, '#ffffff');
+  capGrad.addColorStop(0.5, '#cbd5e1');
+  capGrad.addColorStop(1, '#94a3b8');
+  drawRoundedRect(ctx, capX, capY, capW, capH, 40, capGrad, '#475569', 4);
+
+  // Capsule Arrow Button - Left
+  const btnLX = capX + 26;
+  const btnLY = capY + 28;
+  const btnR = 20;
+  const arrowGrad = ctx.createRadialGradient(btnLX, btnLY, 0, btnLX, btnLY, btnR);
+  arrowGrad.addColorStop(0, '#60a5fa');
+  arrowGrad.addColorStop(1, '#2563eb');
+  ctx.beginPath();
+  ctx.arc(btnLX, btnLY, btnR, 0, Math.PI * 2);
+  ctx.fillStyle = arrowGrad;
+  ctx.fill();
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 20px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('◀', btnLX, btnLY);
+
+  // Capsule Arrow Button - Right
+  const btnRX = capX + capW - 26;
+  const btnRY = capY + 28;
+  ctx.beginPath();
+  ctx.arc(btnRX, btnRY, btnR, 0, Math.PI * 2);
+  ctx.fillStyle = arrowGrad;
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText('▶', btnRX, btnRY);
+
+  // Titles inside Capsule
+  ctx.fillStyle = '#0b1d4f';
+  ctx.font = `bold 32px 'Jua', 'Noto Sans KR', sans-serif`;
+  ctx.fillText('파 도', capX + capW / 2, capY + 32);
+
+  ctx.fillStyle = '#d97706';
+  ctx.font = `bold 16px 'Share Tech Mono', sans-serif`;
+  ctx.fillText('Player for Soribada', capX + capW / 2, capY + 64);
+
+  // 3. Draw Metadata Display panel
+  const metaY = 160;
+  const metaH = 140;
+  const metaW = canvasWidth - 80;
+  const metaX = 40;
+  drawRoundedRect(ctx, metaX, metaY, metaW, metaH, 16, '#050c24', '#64748b', 4);
+
+  // Mode button & Spect. button on metadata
+  const drawMetaCapsuleBtn = (x, y, text) => {
+    const btnW = 110;
+    const btnH = 34;
+    const grad = ctx.createLinearGradient(x, y, x, y + btnH);
+    grad.addColorStop(0, '#60a5fa');
+    grad.addColorStop(1, '#2563eb');
+    drawRoundedRect(ctx, x, y, btnW, btnH, 10, grad, '#1e3a8a', 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 16px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, x + btnW / 2, y + btnH / 2);
+  };
+  drawMetaCapsuleBtn(metaX + 30, metaY + 20, 'Mode');
+  drawMetaCapsuleBtn(metaX + metaW - 140, metaY + 20, 'Spect.');
+
+  // Timer counter
+  ctx.fillStyle = '#ffffff';
+  ctx.font = `bold 42px 'Share Tech Mono', monospace`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('00:28.23', metaX + metaW / 2, metaY + 38);
+
+  // Track info texts
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(metaX + 20, metaY + 74);
+  ctx.lineTo(metaX + metaW - 20, metaY + 74);
+  ctx.stroke();
+
+  ctx.textAlign = 'left';
+  ctx.font = `bold 22px 'Share Tech Mono', monospace`;
+  ctx.fillStyle = '#facc15';
+  ctx.fillText('1. 1-02시~1.MP3', metaX + 30, metaY + 105);
+
+  ctx.textAlign = 'right';
+  ctx.font = `20px 'Share Tech Mono', monospace`;
+  ctx.fillStyle = '#38bdf8';
+  ctx.fillText('[MP3]-[128K]-[Stereo]-[27:32]', metaX + metaW - 30, metaY + 105);
+
+  // 4. Draw Screen/Workspace Area (containing photo strip slots)
+  const screenY = 320;
+  const screenH = canvasHeight - 320 - 240; // available space before footer
+  const screenW = canvasWidth - 80;
+  const screenX = 40;
+
+  drawRoundedRect(ctx, screenX, screenY, screenW, screenH, 20, '#0d2054', '#475569', 6);
+
+  // Clip workspace area for visualizer scanlines & cyan gradient background
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(screenX + 4, screenY + 4, screenW - 8, screenH - 8);
+  ctx.clip();
+
+  // Draw bright cyan visualizer gradient behind the strip
+  const stripWidth = 780;
+  const stripHeight = isFourCut ? 1720 : 660;
+  const stripX = screenX + (screenW - stripWidth) / 2;
+  const stripY = screenY + (screenH - stripHeight) / 2;
+
+  const visGrad = ctx.createLinearGradient(stripX, stripY, stripX, stripY + stripHeight);
+  visGrad.addColorStop(0, '#00ffff');
+  visGrad.addColorStop(1, '#00a8cc');
+  ctx.fillStyle = visGrad;
+  ctx.fillRect(stripX, stripY, stripWidth, stripHeight);
+  
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.lineWidth = 8;
+  ctx.strokeRect(stripX, stripY, stripWidth, stripHeight);
+
+  // Soundwave visualizer line in the center-back of the strip
+  ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  const waveY = stripY + stripHeight / 2;
+  ctx.moveTo(stripX, waveY);
+  // draw a stylized sine-like waveform
+  for (let sx = stripX; sx <= stripX + stripWidth; sx += 20) {
+    const waveAmp = 40 * Math.sin((sx - stripX) * 0.05);
+    ctx.lineTo(sx, waveY + waveAmp);
+  }
+  ctx.stroke();
+
+  // Draw Photo Slots
+  const paddingX = stripWidth * 0.07;
+  const topOffset = stripHeight * 0.065;
+  const slotSpacing = stripHeight * 0.015;
+  const slotCount = isFourCut ? 4 : 1;
+  const footerHeight = stripHeight * 0.085;
+
+  const availableHeight = stripHeight - topOffset - footerHeight - (slotSpacing * (slotCount - 1));
+  const slotHeight = availableHeight / slotCount;
+  const slotWidth = stripWidth - (paddingX * 2);
+
+  for (let i = 0; i < slotCount; i++) {
+    const sx = stripX + paddingX;
+    const sy = stripY + topOffset + i * (slotHeight + slotSpacing);
+
+    ctx.fillStyle = 'rgba(11, 29, 79, 0.95)';
+    ctx.fillRect(sx, sy, slotWidth, slotHeight);
+
+    const imgData = state.capturedImages[i];
+    if (imgData) {
+      await drawImageCropped(ctx, imgData, sx, sy, slotWidth, slotHeight);
+    } else {
+      ctx.fillStyle = '#facc15';
+      ctx.font = `bold ${slotHeight * 0.1}px 'Share Tech Mono', sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText("click! 📸", sx + slotWidth / 2, sy + slotHeight / 2);
+    }
+
+    ctx.strokeStyle = '#3b82f6';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(sx, sy, slotWidth, slotHeight);
+  }
+
+
+  // Draw Date at the bottom of the photo strip
+  const dateY = stripY + stripHeight - (footerHeight / 2);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font = `bold ${stripWidth * 0.045}px 'Share Tech Mono', monospace`;
+  ctx.fillStyle = '#facc15';
+  ctx.fillText(currentDateStr.textContent, stripX + stripWidth / 2, dateY);
+
+  ctx.restore(); // remove clipping
+
+  // 5. Draw Footer controls
+  const footerY = canvasHeight - 210;
+  const footerH = 170;
+  const footerW = canvasWidth - 80;
+  const footerX = 40;
+
+  const footerGrad = ctx.createLinearGradient(footerX, footerY, footerX, footerY + footerH);
+  footerGrad.addColorStop(0, '#cbd5e1');
+  footerGrad.addColorStop(1, '#94a3b8');
+  drawRoundedRect(ctx, footerX, footerY, footerW, footerH, 20, footerGrad, '#64748b', 4);
+
+  // Helper to draw circular playback buttons
+  const drawCtrlCircleBtn = (x, y, r, symbol) => {
+    const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+    grad.addColorStop(0, '#f8fafc');
+    grad.addColorStop(1, '#cbd5e1');
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    ctx.fillStyle = '#0f172a';
+    ctx.font = 'bold 22px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(symbol, x, y);
+  };
+
+  // Draw Playback buttons (left group)
+  const pbY = footerY + 54;
+  const pbStart = footerX + 45;
+  const pbGap = 65;
+  const playbackSymbols = ['⏮', '⏹', '⏯', '⏭'];
+  playbackSymbols.forEach((sym, idx) => {
+    drawCtrlCircleBtn(pbStart + idx * pbGap, pbY, 26, sym);
+  });
+
+  // Draw Action buttons (right group)
+  const actY = footerY + 54;
+  const actEnd = footerX + footerW - 45;
+  const actionSymbols = ['⚙️', '🔊', '☰', '📊'];
+  actionSymbols.forEach((sym, idx) => {
+    drawCtrlCircleBtn(actEnd - idx * pbGap, actY, 26, sym);
+  });
+
+  // Draw Progress Bar (middle)
+  const progX = pbStart + 4 * pbGap + 10;
+  const progW = actEnd - 3 * pbGap - 10 - progX;
+  const progY = footerY + 52;
+  const progH = 10;
+  drawRoundedRect(ctx, progX, progY, progW, progH, 4, '#334155', null, 0);
+
+  // Progress Knob (circle)
+  const knobX = progX + progW * 0.28;
+  const knobY = progY + 5;
+  const knobR = 15;
+  const knobGrad = ctx.createRadialGradient(knobX, knobY, 0, knobX, knobY, knobR);
+  knobGrad.addColorStop(0, '#ffffff');
+  knobGrad.addColorStop(1, '#cbd5e1');
+  ctx.beginPath();
+  ctx.arc(knobX, knobY, knobR, 0, Math.PI * 2);
+  ctx.fillStyle = knobGrad;
+  ctx.fill();
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Bottom Logo Badge (glowing cyan capsule)
+  const badgeW = 200;
+  const badgeH = 46;
+  const badgeX = footerX + footerW - badgeW - 30;
+  const badgeY = footerY + 110;
+  const badgeGrad = ctx.createLinearGradient(badgeX, badgeY, badgeX + badgeW, badgeY);
+  badgeGrad.addColorStop(0, '#0284c7');
+  badgeGrad.addColorStop(1, '#06b6d4');
+  drawRoundedRect(ctx, badgeX, badgeY, badgeW, badgeH, 20, badgeGrad, '#00f0ff', 3);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = `italic bold 24px 'Share Tech Mono', 'Times New Roman', serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('Sorinara', badgeX + badgeW / 2, badgeY + badgeH / 2);
 }
 
 // Window load init
