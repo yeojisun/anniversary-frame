@@ -282,7 +282,8 @@ body {
   display: inline-block;
   vertical-align: bottom;
   margin: 0 -6px; /* Clustered overlap */
-  animation: float-char 2.2s ease-in-out infinite alternate;
+  /* Static crooked offset placement */
+  transform: translateY(var(--char-y, 0px)) rotate(var(--char-rot, 0deg));
 }
 
 .logo-char img {
@@ -291,11 +292,14 @@ body {
   object-fit: contain;
   display: block;
   filter: drop-shadow(3px 3px 0px rgba(0, 0, 0, 0.08));
+  /* Float animation applied to the image inside */
+  animation: float-char 2.2s ease-in-out infinite alternate;
+  animation-delay: inherit; /* Inherit delay from parent span */
 }
 
 @keyframes float-char {
   0% { transform: translateY(0) rotate(-1.5deg); }
-  100% { transform: translateY(-7px) rotate(1.5deg); }
+  100% { transform: translateY(-6px) rotate(1.5deg); }
 }
 
 @keyframes float-container {

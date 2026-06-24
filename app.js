@@ -1190,6 +1190,9 @@ function drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight) {
       const baseSize = stripWidth * 0.155; // Larger base size for stacked layout
       const overlapRatio = 0.09; // 9% horizontal overlap to match UI
       
+      const charRots = [-5, 7, -3, 4, -4, 6, -4, 5, -5, 6].map(deg => deg * Math.PI / 180);
+      const charYOffsets = [-4, 5, -2, 3, 4, -3, 2, -4, 3, -2];
+      
       const widths = [];
       const heights = [];
       
@@ -1226,6 +1229,9 @@ function drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight) {
       const baselineY1 = stripY + (stripHeight * 0.44);
       const baselineY2 = stripY + (stripHeight * 0.90);
       
+      // Scale factor to translate CSS pixel offsets to high-res canvas scale
+      const offsetScale = baseSize / 56;
+      
       // Draw Row 1
       let currentX1 = stripX + (stripWidth - row1W) / 2;
       for (let i = 0; i <= 3; i++) {
@@ -1233,7 +1239,18 @@ function drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight) {
         const w = widths[i];
         const h = heights[i];
         if (img && img.naturalWidth) {
-          ctx.drawImage(img, currentX1, baselineY1 - h, w, h);
+          const yOff = charYOffsets[i] * offsetScale;
+          
+          // Draw with individual center point rotation and offset translation
+          const cx = currentX1 + w / 2;
+          const cy = (baselineY1 - h / 2) + yOff;
+          
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(charRots[i]);
+          ctx.drawImage(img, -w / 2, -h / 2, w, h);
+          ctx.restore();
+          
           currentX1 += w - (w * overlapRatio);
         }
       }
@@ -1245,7 +1262,18 @@ function drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight) {
         const w = widths[i];
         const h = heights[i];
         if (img && img.naturalWidth) {
-          ctx.drawImage(img, currentX2, baselineY2 - h, w, h);
+          const yOff = charYOffsets[i] * offsetScale;
+          
+          // Draw with individual center point rotation and offset translation
+          const cx = currentX2 + w / 2;
+          const cy = (baselineY2 - h / 2) + yOff;
+          
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(charRots[i]);
+          ctx.drawImage(img, -w / 2, -h / 2, w, h);
+          ctx.restore();
+          
           currentX2 += w - (w * overlapRatio);
         }
       }
