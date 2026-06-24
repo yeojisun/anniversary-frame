@@ -1308,15 +1308,16 @@ body {
 /* Responsive updates */
 @media (max-width: 480px) {
   body {
-    padding: 10px 6px;
+    padding: 10px 4px;
+    overflow-x: hidden;
   }
 
   .app-container {
     width: 100%;
     max-width: 100%;
-    padding: 0 4px;
+    padding: 0 8px;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow-x: hidden;
   }
 
   .content-wrapper {
@@ -1324,13 +1325,15 @@ body {
     max-width: 100%;
     grid-template-columns: 1fr;
     gap: 16px;
-    overflow: hidden;
+    overflow-x: hidden;
   }
 
   .photo-workspace-section {
     width: 100%;
     display: flex;
     justify-content: center;
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
   .logo-row.row-bottom {
@@ -1348,35 +1351,49 @@ body {
   .frame-container {
     padding: 2px;
     box-shadow: 4px 4px 0px rgba(0,0,0,0.15);
-    max-width: 92vw; /* Ensure window fits within screens */
+    width: 100%;
+    max-width: 290px; /* Constrain total frame width to fit mobile */
     height: auto;
+    box-sizing: border-box;
+  }
+
+  .win-body-wrapper {
+    width: 100%;
+    box-sizing: border-box;
   }
   
   .win-sidebar {
-    width: 42px;
+    width: 38px; /* Slim sidebar for mobile */
     padding: 2px;
+    gap: 2px;
+  }
+
+  .toolbar-row {
+    gap: 2px;
   }
   
   .toolbar-icon {
-    width: 16px;
-    height: 16px;
-    font-size: 9px;
+    width: 14px;
+    height: 14px;
+    font-size: 8px;
   }
   
   .win-canvas-area {
-    padding: 8px;
+    padding: 6px;
+    flex: 1;
+    min-width: 0;
   }
   
   .slots-grid {
-    padding: 8px;
+    padding: 6px;
+    width: 100%;
   }
   
   .format-four-cut {
+    width: 240px; /* Canvas width limited so total width doesn't exceed 290px */
     height: auto;
     aspect-ratio: 3 / 7;
-    width: 78vw; /* Scale automatically relative to screen width */
-    max-width: 280px;
-    max-height: 580px;
+    max-width: 100%;
   }
   
   .format-four-cut .slots-grid {
@@ -1385,10 +1402,10 @@ body {
   }
   
   .format-single-cut {
+    width: 240px;
     height: auto;
     aspect-ratio: 1 / 1.06;
-    width: 78vw;
-    max-width: 280px;
+    max-width: 100%;
   }
   
   .slot-icon {
@@ -1403,12 +1420,36 @@ body {
     width: 100%;
     max-width: 100%;
     padding: 0;
+    box-sizing: border-box;
   }
 
   .toolbox-card {
     padding: 12px;
     width: 100%;
     box-sizing: border-box;
+  }
+
+  /* Stack button groups vertically on mobile to prevent clipping */
+  .btn-group {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .control-btn {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 0.88rem;
+  }
+
+  .camera-actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .action-btn {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 8px;
   }
 
   .sticker-selector {
