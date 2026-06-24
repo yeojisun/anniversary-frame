@@ -1353,10 +1353,17 @@ body {
     box-shadow: 4px 4px 0px rgba(0,0,0,0.15);
     width: 92vw; /* Adjust dynamically to device width */
     max-width: 295px; /* Prevent overstretching */
+    max-height: 60vh; /* Prevent vertical clipping on short screens */
     height: auto;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+  }
+
+  .win-menu-bar {
+    gap: 6px; /* Reduce gap to shrink minimum width requirement */
+    font-size: 0.72rem;
+    padding: 3px 4px;
   }
 
   .win-body-wrapper {
@@ -1365,6 +1372,7 @@ body {
     display: flex;
     flex-direction: row;
     overflow: hidden;
+    max-height: 100%;
   }
   
   .win-sidebar {
@@ -1391,10 +1399,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    max-height: 100%;
+    overflow: hidden;
   }
   
   .slots-grid {
     width: 100%; /* Fill container width */
+    max-height: 100%; /* Contain within dynamic canvas height */
     height: auto;
     padding: 6px;
     box-sizing: border-box;
@@ -1404,11 +1415,13 @@ body {
     width: 100%;
     height: auto;
     max-width: 100%;
+    max-height: 100%;
   }
   
   .format-four-cut .slots-grid {
     width: 100%;
     height: auto;
+    max-height: 100%;
     aspect-ratio: 3 / 7; /* Automatically compute vertical height based on dynamic width */
   }
   
@@ -1416,11 +1429,13 @@ body {
     width: 100%;
     height: auto;
     max-width: 100%;
+    max-height: 100%;
   }
   
   .format-single-cut .slots-grid {
     width: 100%;
     height: auto;
+    max-height: 100%;
     aspect-ratio: 1 / 1.06;
   }
   
