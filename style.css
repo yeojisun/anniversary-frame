@@ -1351,19 +1351,25 @@ body {
   .frame-container {
     padding: 2px;
     box-shadow: 4px 4px 0px rgba(0,0,0,0.15);
-    width: 100%;
-    max-width: 290px; /* Constrain total frame width to fit mobile */
+    width: 92vw; /* Adjust dynamically to device width */
+    max-width: 295px; /* Prevent overstretching */
     height: auto;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
   }
 
   .win-body-wrapper {
     width: 100%;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
   }
   
   .win-sidebar {
-    width: 38px; /* Slim sidebar for mobile */
+    width: 38px; /* Fixed slim sidebar for toolbar */
+    flex-shrink: 0;
     padding: 2px;
     gap: 2px;
   }
@@ -1382,30 +1388,40 @@ body {
     padding: 6px;
     flex: 1;
     min-width: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   .slots-grid {
+    width: 100%; /* Fill container width */
+    height: auto;
     padding: 6px;
-    width: 100%;
+    box-sizing: border-box;
   }
   
   .format-four-cut {
-    width: 240px; /* Canvas width limited so total width doesn't exceed 290px */
+    width: 100%;
     height: auto;
-    aspect-ratio: 3 / 7;
     max-width: 100%;
   }
   
   .format-four-cut .slots-grid {
-    aspect-ratio: 3 / 7;
-    height: 100%;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 7; /* Automatically compute vertical height based on dynamic width */
   }
   
   .format-single-cut {
-    width: 240px;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+  }
+  
+  .format-single-cut .slots-grid {
+    width: 100%;
     height: auto;
     aspect-ratio: 1 / 1.06;
-    max-width: 100%;
   }
   
   .slot-icon {
