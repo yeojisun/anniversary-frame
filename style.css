@@ -1151,10 +1151,9 @@ body {
 /* Frame themes scroll */
 .frame-themes-scroll {
   display: flex;
-  gap: 10px;
-  overflow-x: auto;
+  flex-wrap: wrap; /* Drop to next row when screen is too narrow */
+  gap: 8px;
   padding: 5px 0 10px 0;
-  scrollbar-width: thin;
 }
 .frame-themes-scroll::-webkit-scrollbar {
   height: 5px;
@@ -1202,7 +1201,7 @@ body {
 /* Sticker items */
 .sticker-selector {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); /* Flow naturally down as width narrows */
   gap: 6px;
   margin-bottom: 10px;
 }
@@ -1228,11 +1227,12 @@ body {
 
 .sticker-text-add {
   display: flex;
+  flex-wrap: wrap; /* Wrap cleanly to next line */
   gap: 6px;
   margin-bottom: 10px;
 }
 .sticker-text-add input {
-  flex: 1;
+  flex: 1 1 180px; /* Constrain input width while expanding dynamically */
   padding: 8px 10px;
   border-radius: 4px;
   border: 1.5px solid #111111;
@@ -1241,7 +1241,8 @@ body {
   outline: none;
 }
 .sticker-text-add button {
-  padding: 0 12px;
+  flex: 1 1 auto; /* Button fills remaining width */
+  padding: 8px 12px;
   font-size: 0.95rem;
   background: #c084fc;
   color: #ffffff;
@@ -1484,7 +1485,7 @@ body {
   }
 
   .sticker-selector {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
     gap: 4px;
   }
 
