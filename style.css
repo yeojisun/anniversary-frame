@@ -1306,7 +1306,7 @@ body {
 }
 
 /* Responsive updates */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   body {
     padding: 10px 4px;
     overflow-x: hidden;
