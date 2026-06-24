@@ -60,7 +60,7 @@ function init() {
   formatCurrentDate();
   setupEventListeners();
   detectCameras();
-  selectSlot(0);
+  selectSlot(0, false);
 
   // Y2K CD Player - interactive turntable speed-up + song switcher
   if (y2kCdPlayer) {
@@ -100,11 +100,9 @@ function formatCurrentDate() {
 }
 
 // --- SLOT HIGHLIGHTS & MODES ---
-function selectSlot(index) {
+function selectSlot(index, autoStart = true) {
   if (state.inputMode === 'camera' && state.cameraStream && state.activeSlotIndex !== index) {
     stopCameraStream();
-    btnStartCamera.classList.remove('hidden');
-    btnTriggerCapture.classList.add('hidden');
   }
 
   state.activeSlotIndex = index;
@@ -116,7 +114,7 @@ function selectSlot(index) {
     }
   });
 
-  if (state.inputMode === 'camera' && state.cameraStream) {
+  if (state.inputMode === 'camera' && autoStart) {
     startCameraStream();
   }
 }
@@ -128,7 +126,7 @@ function setupEventListeners() {
       if (e.target.classList.contains('retake-btn') || countdownOverlay.classList.contains('active')) {
         return;
       }
-      selectSlot(index);
+      selectSlot(index, true);
     });
 
     const retakeBtn = slot.querySelector('.retake-btn');

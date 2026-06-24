@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Jua&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1.4">
+  <link rel="stylesheet" href="style.css?v=1.5">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -160,7 +160,7 @@
                 <div class="photo-slot" data-slot="0" id="slot0">
                   <div class="slot-placeholder">
                     <span class="slot-icon">📸</span>
-                    <span class="slot-text">cut 01</span>
+                    <span class="slot-text">click! 📸</span>
                   </div>
                   <video class="video-preview hidden" autoplay playsinline muted></video>
                   <img class="photo-preview hidden" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Slot 1 Image">
@@ -170,7 +170,7 @@
                 <div class="photo-slot" data-slot="1" id="slot1">
                   <div class="slot-placeholder">
                     <span class="slot-icon">📸</span>
-                    <span class="slot-text">cut 02</span>
+                    <span class="slot-text">click! 📸</span>
                   </div>
                   <video class="video-preview hidden" autoplay playsinline muted></video>
                   <img class="photo-preview hidden" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Slot 2 Image">
@@ -180,7 +180,7 @@
                 <div class="photo-slot" data-slot="2" id="slot2">
                   <div class="slot-placeholder">
                     <span class="slot-icon">📸</span>
-                    <span class="slot-text">cut 03</span>
+                    <span class="slot-text">click! 📸</span>
                   </div>
                   <video class="video-preview hidden" autoplay playsinline muted></video>
                   <img class="photo-preview hidden" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Slot 3 Image">
@@ -190,7 +190,7 @@
                 <div class="photo-slot" data-slot="3" id="slot3">
                   <div class="slot-placeholder">
                     <span class="slot-icon">📸</span>
-                    <span class="slot-text">cut 04</span>
+                    <span class="slot-text">click! 📸</span>
                   </div>
                   <video class="video-preview hidden" autoplay playsinline muted></video>
                   <img class="photo-preview hidden" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Slot 4 Image">
@@ -224,10 +224,10 @@
           <div class="sub-control-panel" id="cameraControlPanel">
             <select id="cameraSelect" class="hidden"></select>
             <div class="camera-actions">
-              <button class="action-btn primary-btn" id="btnStartCamera">촬영 시작하기</button>
+              <button class="action-btn primary-btn hidden" id="btnStartCamera">촬영 시작하기</button>
               <button class="action-btn capture-btn hidden" id="btnTriggerCapture">사진 촬영</button>
             </div>
-            <p class="help-text">사진 슬롯을 눌러 활성화한 후, [사진 촬영]을 누르면 3초 후 촬영됩니다.</p>
+            <p class="help-text">원하는 칸을 누르면 즉시 카메라가 시작됩니다. [사진 촬영]을 누르면 3초 후 촬영됩니다.</p>
           </div>
 
           <!-- Upload controls -->
@@ -311,6 +311,6 @@
   <!-- Hidden Canvas for Composite rendering -->
   <canvas id="compositeCanvas" style="display: none;"></canvas>
 
-  <script src="app.js?v=1.4"></script>
+  <script src="app.js?v=1.5"></script>
 </body>
 </html>
