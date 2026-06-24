@@ -1188,7 +1188,7 @@ function drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight) {
     
     function drawAll() {
       const baseSize = stripWidth * 0.155; // Larger base size for stacked layout
-      const overlapRatio = 0.09; // 9% horizontal overlap to match UI
+      const overlapRatio = 0.045; // 4.5% horizontal overlap to match UI (wider)
       
       const charRots = [-5, 7, -3, 4, -4, 6, -4, 5, -5, 6].map(deg => deg * Math.PI / 180);
       const charYOffsets = [-4, 5, -2, 3, 4, -3, 2, -4, 3, -2];
@@ -1225,9 +1225,9 @@ function drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight) {
         if (i < 9) row2W -= widths[i] * overlapRatio;
       }
       
-      // Baseline Y coordinates for two rows to overlap vertically
-      const baselineY1 = stripY + (stripHeight * 0.44);
-      const baselineY2 = stripY + (stripHeight * 0.90);
+      // Baseline Y coordinates for two rows to overlap vertically (slightly wider gap)
+      const baselineY1 = stripY + (stripHeight * 0.40);
+      const baselineY2 = stripY + (stripHeight * 0.92);
       
       // Scale factor to translate CSS pixel offsets to high-res canvas scale
       const offsetScale = baseSize / 56;

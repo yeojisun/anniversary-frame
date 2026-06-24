@@ -274,14 +274,14 @@ body {
 }
 
 .logo-row.row-bottom {
-  margin-top: clamp(-20px, -2.8vh, -12px);
+  margin-top: clamp(-14px, -2.0vh, -8px); /* Slightly wider vertical gap */
   z-index: 2;
 }
 
 .logo-char {
   display: inline-block;
   vertical-align: bottom;
-  margin: 0 -6px; /* Clustered overlap */
+  margin: 0 -3px; /* Slightly wider clustered overlap */
   /* Static crooked offset placement */
   transform: translateY(var(--char-y, 0px)) rotate(var(--char-rot, 0deg));
 }
@@ -1304,10 +1304,10 @@ body {
 /* Responsive updates */
 @media (max-width: 480px) {
   .logo-row.row-bottom {
-    margin-top: -12px;
+    margin-top: -8px;
   }
   .logo-char {
-    margin: 0 -3px;
+    margin: 0 -1.5px;
   }
   .subtitle {
     font-size: 0.85rem;
