@@ -46,11 +46,15 @@
   min-height: 0;
 }
 
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   /* Helvetica font specified from Notion page */
   font-family: 'Helvetica', 'Inter', 'Noto Sans KR', sans-serif;
   min-height: 100vh;
-  overflow-x: hidden;
   color: #111111;
   position: relative;
   display: flex;
@@ -1303,47 +1307,123 @@ body {
 
 /* Responsive updates */
 @media (max-width: 480px) {
+  body {
+    padding: 10px 6px;
+  }
+
+  .app-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 4px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .content-wrapper {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    overflow: hidden;
+  }
+
+  .photo-workspace-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
   .logo-row.row-bottom {
     margin-top: -8px;
   }
+  
   .logo-char {
     margin: 0 -1.5px;
   }
+  
   .subtitle {
     font-size: 0.85rem;
   }
+  
   .frame-container {
     padding: 2px;
     box-shadow: 4px 4px 0px rgba(0,0,0,0.15);
+    max-width: 92vw; /* Ensure window fits within screens */
+    height: auto;
   }
+  
   .win-sidebar {
     width: 42px;
     padding: 2px;
   }
+  
   .toolbar-icon {
     width: 16px;
     height: 16px;
     font-size: 9px;
   }
+  
   .win-canvas-area {
     padding: 8px;
   }
+  
   .slots-grid {
     padding: 8px;
   }
+  
   .format-four-cut {
-    height: 62vh;
-    max-height: 500px;
+    height: auto;
+    aspect-ratio: 3 / 7;
+    width: 78vw; /* Scale automatically relative to screen width */
+    max-width: 280px;
+    max-height: 580px;
   }
+  
+  .format-four-cut .slots-grid {
+    aspect-ratio: 3 / 7;
+    height: 100%;
+  }
+  
   .format-single-cut {
-    height: 48vh;
-    max-height: 380px;
+    height: auto;
+    aspect-ratio: 1 / 1.06;
+    width: 78vw;
+    max-width: 280px;
   }
+  
   .slot-icon {
     font-size: 1.1rem;
   }
+  
   .slot-text {
     font-size: 0.7rem;
+  }
+
+  .toolbox-section {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .toolbox-card {
+    padding: 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .sticker-selector {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+  }
+
+  .sticker-item {
+    font-size: 1.4rem;
+    padding: 2px;
+  }
+
+  .download-trigger-btn {
+    font-size: 1.0rem;
+    padding: 10px 14px;
   }
 }
 
