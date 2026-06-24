@@ -124,7 +124,7 @@ function selectSlot(index, autoStart = true) {
   });
 
   if (state.inputMode === 'camera' && autoStart) {
-    startCameraStream();
+    startCameraStream(true);
   }
 }
 
@@ -332,7 +332,7 @@ async function detectCameras() {
   }
 }
 
-async function startCameraStream() {
+async function startCameraStream(triggerCapture = false) {
   stopCameraStream();
 
   const slotIndex = state.activeSlotIndex;
@@ -364,6 +364,12 @@ async function startCameraStream() {
     
     if (state.devices.length > 0 && !state.devices[0].label) {
       await detectCameras();
+    }
+
+    if (triggerCapture === true) {
+      setTimeout(() => {
+        triggerPhotoCountdown();
+      }, 350);
     }
   } catch (err) {
     console.error(err);
