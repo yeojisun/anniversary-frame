@@ -110,8 +110,23 @@ function formatCurrentDate() {
 
 // --- SLOT HIGHLIGHTS & MODES ---
 function selectSlot(index, autoStart = true) {
-  if (state.inputMode === 'camera' && state.cameraStream && state.activeSlotIndex !== index) {
-    stopCameraStream();
+  if (state.inputMode === 'camera' && state.activeSlotIndex !== index) {
+    // Hide the previous slot's video element (but keep stream active!)
+    const prevSlot = slots[state.activeSlotIndex];
+    if (prevSlot) {
+      const prevVideo = prevSlot.querySelector('.video-preview');
+      const prevPlaceholder = prevSlot.querySelector('.slot-placeholder');
+      const prevImg = prevSlot.querySelector('.photo-preview');
+      const prevRetakeBtn = prevSlot.querySelector('.retake-btn');
+
+      if (prevVideo) prevVideo.classList.add('hidden');
+      if (state.capturedImages[state.activeSlotIndex]) {
+        if (prevImg) prevImg.classList.remove('hidden');
+        if (prevRetakeBtn) prevRetakeBtn.classList.remove('hidden');
+      } else {
+        if (prevPlaceholder) prevPlaceholder.classList.remove('hidden');
+      }
+    }
   }
 
   state.activeSlotIndex = index;
@@ -333,8 +348,6 @@ async function detectCameras() {
 }
 
 async function startCameraStream(triggerCapture = false) {
-  stopCameraStream();
-
   const slotIndex = state.activeSlotIndex;
   const slot = slots[slotIndex];
   const video = slot.querySelector('.video-preview');
@@ -346,6 +359,20 @@ async function startCameraStream(triggerCapture = false) {
   retakeBtn.classList.add('hidden');
   placeholder.classList.add('hidden');
   video.classList.remove('hidden');
+
+  // If the stream is already running, reuse it immediately with zero delay!
+  if (state.cameraStream) {
+    video.srcObject = state.cameraStream;
+    video.play().catch(err => console.error("Error playing video preview:", err));
+
+    btnStartCamera.classList.add('hidden');
+    btnTriggerCapture.classList.remove('hidden');
+
+    if (triggerCapture === true) {
+      triggerPhotoCountdown();
+    }
+    return;
+  }
 
   const deviceId = cameraSelect.value;
   const constraints = {
@@ -440,13 +467,16 @@ function capturePhoto() {
   video.classList.add('hidden');
   retakeBtn.classList.remove('hidden');
 
-  stopCameraStream();
-  btnStartCamera.classList.remove('hidden');
-  btnTriggerCapture.classList.add('hidden');
+  const nextEmptyIndex = state.layoutMode === 'four-cut'
+    ? state.capturedImages.findIndex((img, idx) => img === null)
+    : -1;
 
-  if (state.layoutMode === 'four-cut') {
-    const nextEmptyIndex = state.capturedImages.findIndex((img, idx) => img === null);
-    if (nextEmptyIndex !== -1) selectSlot(nextEmptyIndex);
+  if (nextEmptyIndex === -1) {
+    stopCameraStream();
+    btnStartCamera.classList.remove('hidden');
+    btnTriggerCapture.classList.add('hidden');
+  } else {
+    selectSlot(nextEmptyIndex, true);
   }
 }
 
