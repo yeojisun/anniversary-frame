@@ -1163,12 +1163,13 @@ async function drawStickers(ctx, sandboxX, sandboxY, sandboxW, sandboxH) {
 
 function drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight) {
   return new Promise((resolve) => {
-    const charNames = ['0', '1', '2', '3', 'space', '4', '5', '6', '7', '8', '9'];
-    const charScales = [1.0, 0.77, 0.77, 0.97, 0.25, 1.05, 0.77, 0.76, 0.77, 0.77, 0.77];
+    // 0~3: '4cut' (row1), 4~9: 'Camera' (row2)
+    const charNames = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const charScales = [1.0, 0.77, 0.77, 0.97, 1.05, 0.77, 0.76, 0.77, 0.77, 0.77];
     
     const images = [];
     let loadedCount = 0;
-    const totalToLoad = 10; // Exclude space
+    const totalToLoad = charNames.length;
     
     const onLoadImage = () => {
       loadedCount++;
@@ -1178,61 +1179,77 @@ function drawCuteTitle(ctx, stripX, stripY, stripWidth, stripHeight) {
     };
     
     for (let i = 0; i < charNames.length; i++) {
-      if (charNames[i] === 'space') {
-        images.push(null);
-      } else {
-        const img = new Image();
-        img.src = `logo_char_${charNames[i]}.png`;
-        img.onload = onLoadImage;
-        img.onerror = onLoadImage;
-        images.push(img);
-      }
+      const img = new Image();
+      img.src = `logo_char_${charNames[i]}.png`;
+      img.onload = onLoadImage;
+      img.onerror = onLoadImage;
+      images.push(img);
     }
     
     function drawAll() {
-      const baseSize = stripWidth * 0.11; // base scale size for title
-      let totalW = 0;
+      const baseSize = stripWidth * 0.155; // Larger base size for stacked layout
+      const overlapRatio = 0.09; // 9% horizontal overlap to match UI
+      
       const widths = [];
       const heights = [];
       
+      // Calculate widths and heights
       for (let i = 0; i < charNames.length; i++) {
-        if (charNames[i] === 'space') {
-          const w = baseSize * 0.25;
+        const img = images[i];
+        if (img && img.naturalWidth) {
+          const h = baseSize * charScales[i];
+          const aspect = img.naturalWidth / img.naturalHeight || 1;
+          const w = h * aspect;
           widths.push(w);
+          heights.push(h);
+        } else {
+          widths.push(0);
           heights.push(0);
-          totalW += w;
-        } else {
-          const img = images[i];
-          if (img && img.naturalWidth) {
-            const h = baseSize * charScales[i];
-            const aspect = img.naturalWidth / img.naturalHeight || 1;
-            const w = h * aspect;
-            widths.push(w);
-            heights.push(h);
-            totalW += w;
-          } else {
-            widths.push(0);
-            heights.push(0);
-          }
         }
       }
       
-      let currentX = stripX + (stripWidth - totalW) / 2;
-      const baselineY = stripY + (stripHeight * 0.052); // Baseline aligned
+      // Row 1: index 0 to 3 ('4', 'c', 'u', 't')
+      let row1W = 0;
+      for (let i = 0; i <= 3; i++) {
+        row1W += widths[i];
+        if (i < 3) row1W -= widths[i] * overlapRatio;
+      }
       
-      for (let i = 0; i < charNames.length; i++) {
-        if (charNames[i] === 'space') {
-          currentX += widths[i];
-        } else {
-          const img = images[i];
-          const w = widths[i];
-          const h = heights[i];
-          if (img && img.naturalWidth) {
-            ctx.drawImage(img, currentX, baselineY - h, w, h);
-            currentX += w;
-          }
+      // Row 2: index 4 to 9 ('C', 'a', 'm', 'e', 'r', 'a')
+      let row2W = 0;
+      for (let i = 4; i <= 9; i++) {
+        row2W += widths[i];
+        if (i < 9) row2W -= widths[i] * overlapRatio;
+      }
+      
+      // Baseline Y coordinates for two rows to overlap vertically
+      const baselineY1 = stripY + (stripHeight * 0.44);
+      const baselineY2 = stripY + (stripHeight * 0.90);
+      
+      // Draw Row 1
+      let currentX1 = stripX + (stripWidth - row1W) / 2;
+      for (let i = 0; i <= 3; i++) {
+        const img = images[i];
+        const w = widths[i];
+        const h = heights[i];
+        if (img && img.naturalWidth) {
+          ctx.drawImage(img, currentX1, baselineY1 - h, w, h);
+          currentX1 += w - (w * overlapRatio);
         }
       }
+      
+      // Draw Row 2
+      let currentX2 = stripX + (stripWidth - row2W) / 2;
+      for (let i = 4; i <= 9; i++) {
+        const img = images[i];
+        const w = widths[i];
+        const h = heights[i];
+        if (img && img.naturalWidth) {
+          ctx.drawImage(img, currentX2, baselineY2 - h, w, h);
+          currentX2 += w - (w * overlapRatio);
+        }
+      }
+      
       resolve();
     }
   });
